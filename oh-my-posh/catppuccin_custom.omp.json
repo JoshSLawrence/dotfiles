@@ -1,0 +1,78 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "palette": {
+    "os": "#ACB0BE",
+        "closer": "p:os",
+    "pink": "#F5BDE6",
+    "lavender": "#B7BDF8",
+    "blue": "#8AADF4"
+  },
+  "blocks": [
+    {
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "foreground": "p:lavender",
+          "properties": {
+            "folder_icon": "..\ue5fe..",
+            "home_icon": "~",
+            "style": "agnoster_short"
+          },
+          "style": "plain",
+          "template": "{{ .Path }} ",
+          "type": "path"
+        },
+        {
+          "foreground": "p:pink",
+          "properties": {
+            "branch_icon": "\ue725 ",
+            "cherry_pick_icon": "\ue29b ",
+            "commit_icon": "\uf417 ",
+            "fetch_status": false,
+            "fetch_upstream_icon": false,
+            "merge_icon": "\ue727 ",
+            "no_commits_icon": "\uf0c3 ",
+            "rebase_icon": "\ue728 ",
+            "revert_icon": "\uf0e2 ",
+            "tag_icon": "\uf412 "
+          },
+          "template": "{{ .HEAD }} ",
+          "style": "plain",
+          "type": "git"
+        },
+        {
+          "type": "python",
+          "template": "{{ if .Venv }}({{ .Venv }}){{ end }}", 
+          "properties": {
+            "fetch_virtual_env": true,
+            "display_default": false,
+            "folder_name_fallback": false
+          }
+        }
+      ],
+      "type": "prompt"
+    },
+    {
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "type": "text",
+          "style": "plain",
+          "foreground": "p:pink",
+          "background": "transparent",
+          "template": "❯"
+        }
+      ],
+      "type": "prompt"
+    }
+  ],
+  "transient_prompt": {
+    "foreground": "magenta",
+    "background": "transparent",
+    "template": "❯ "
+  },
+  "final_space": true,
+  "version": 2
+}
