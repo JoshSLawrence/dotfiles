@@ -1,0 +1,4 @@
+export AZURE_CLIENT_ID=""
+export AZURE_CLIENT_SECRET=""
+export AZURE_TENANT_ID=""
+export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt

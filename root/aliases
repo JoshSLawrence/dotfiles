@@ -1,0 +1,8 @@
+alias ll='ls -l'
+alias la='ls -la'
+alias vim='nvim'
+alias tf='terraform'
+alias python='python3'
+alias newvenv='python3 -m venv .venv'
+alias activate='source .venv/bin/activate'
+alias py='python3'

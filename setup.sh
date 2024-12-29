@@ -6,6 +6,7 @@ local_config_dir="$HOME/.config"
 remote_config_dir="./config"
 local_dirs=$(find $local_config_dir -mindepth 1 -maxdepth 1 -type d)
 remote_dirs=$(find "./config" -mindepth 1 -maxdepth 1 -type d)
+remote_root_dotfiles=$(find "./root" -mindepth 1 -maxdepth 1 -type f)
 
 # Colors for string formatting
 Color_Off='\033[0m'
@@ -65,9 +66,25 @@ detect_untracked(){
     done
 }
 
+
 # Collect local and remote config dir names
 remote_names=$(fetch_dirs "${remote_dirs}")
 local_names=$(fetch_dirs "${local_dirs}")
+remote_root_dotfile_names=$(fetch_dirs "${remote_root_dotfiles}")
+
+# Install root dotfiles
+for dotfile in $remote_root_dotfile_names; do
+    rm -f "$HOME/.$dotfile"
+    cp "./root/$dotfile" "$HOME/.$dotfile"
+
+    # Check for bad exit code from copy
+    if [ $? -ne 0 ]; then
+        echo -e "$Red[Failed]$Color_Off local '.$dotfile' sync."
+        exit
+    fi
+
+    echo -e "$Green[SUCCESS]$Color_Off local '.$dotfile' is in sync with remote."
+done
 
 # Provision config
 for name in $remote_names; do
@@ -76,11 +93,11 @@ for name in $remote_names; do
 
     # Check for bad exit code by rsync
     if [ $? -ne 0 ]; then
-        echo -e "$Red[Failed]$Color_Off local config '$name' sync."
+        echo -e "$Red[Failed]$Color_Off local '.config/$name' sync."
         exit
     fi
 
-    echo -e "$Green[SUCCESS]$Color_Off local config '$name' is in sync with remote."
+    echo -e "$Green[SUCCESS]$Color_Off local '.config/$name' is in sync with remote."
 done
 
 # Show local dirs not present in remote
