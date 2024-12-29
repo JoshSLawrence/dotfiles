@@ -74,8 +74,8 @@ remote_root_dotfile_names=$(fetch_dirs "${remote_root_dotfiles}")
 
 # Install root dotfiles
 for dotfile in $remote_root_dotfile_names; do
-    rm -f "$HOME/.$dotfile"
-    cp "./root/$dotfile" "$HOME/.$dotfile"
+    rm -rf "$HOME/.$dotfile"
+    rsync -rvc --quiet "./root/$dotfile" "$HOME/.$dotfile"
 
     # Check for bad exit code from copy
     if [ $? -ne 0 ]; then
