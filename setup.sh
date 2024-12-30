@@ -116,17 +116,17 @@ if [ $OS == "Linux" ]; then
 elif [ $OS == "Darwin" ]; then
     brew update
     brew upgrade 
-    brew install ca-certificates
-    brew install curl
-    brew install zsh-syntax-highlighting
+    brew reinstall ca-certificates
+    brew reinstall curl
+    brew reinstall zsh-syntax-highlighting
 else
     echo "$Red[ERROR]$Color_Off unknown operating system!"
 fi
 
 
 # Install shared brew packages
-brew install jandedobbeleer/oh-my-posh/oh-my-posh
-brew install jesseduffield/lazygit/lazygit
+brew reinstall jandedobbeleer/oh-my-posh/oh-my-posh
+brew reinstall jesseduffield/lazygit/lazygit
 
 # Collect local and remote config dir names
 remote_names=$(fetch_dirs "${remote_dirs}")
@@ -168,12 +168,14 @@ done
 echo $OS
 
 if [ $OS == "Darwin" ]; then
-	echo 'eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/catppuccin_custom.omp.json)"' >> "$HOME/.zshrc"
-	echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
+    echo 'eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/catppuccin_custom.omp.json)"' >> "$HOME/.zshrc"
+    echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> $HOME/.zshrc
+    echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
 elif [ $OS == "Linux" ]; then
-	echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> "$HOME/.zshrc"
-	echo 'eval "$(oh-my-posh init zsh --config /home/josh/.config/oh-my-posh/catppuccin_custom.omp.json)' >> "$HOME/.zshrc"
-	echo "source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
+    echo 'eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/catppuccin_custom.omp.json)"' >> "$HOME/.zshrc"
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> "$HOME/.zshrc"
+    echo 'eval "$(oh-my-posh init zsh --config /home/josh/.config/oh-my-posh/catppuccin_custom.omp.json)' >> "$HOME/.zshrc"
+    echo "source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
 fi
 
 # Show local dirs not present in remote
