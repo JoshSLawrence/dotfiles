@@ -170,12 +170,14 @@ echo $OS
 if [ $OS == "Darwin" ]; then
     echo 'eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/catppuccin_custom.omp.json)"' >> "$HOME/.zshrc"
     echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> $HOME/.zshrc
-    echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
+    echo "source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
 elif [ $OS == "Linux" ]; then
     echo 'eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/catppuccin_custom.omp.json)"' >> "$HOME/.zshrc"
     echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> "$HOME/.zshrc"
     echo 'eval "$(oh-my-posh init zsh --config /home/josh/.config/oh-my-posh/catppuccin_custom.omp.json)' >> "$HOME/.zshrc"
-    echo "source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
+    echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
+else
+    echo "$Red[ERROR]$Color_Off unable to update .zshrc for unknown operating system!"
 fi
 
 # Show local dirs not present in remote
