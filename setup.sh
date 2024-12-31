@@ -99,20 +99,27 @@ detect_untracked(){
 OS=$(uname)
 
 if [ $OS == "Linux" ]; then
-    # Install apt packages
     sudo apt update -y
     sudo apt upgrade -y
-    sudo apt install build-essential # required for oh-my-posh
-    sudo apt install zsh-syntax-highlighting
+
     sudo apt install zsh
+    sudo apt install zsh-syntax-highlighting
+    echo "Changing default shell to zsh, prompting for password..."
+    chsh -s /bin/zsh
+
+    # required for oh-my-posh
+    sudo apt install build-essential
+
+    # Dependencies for spotify_player
+    sudo apt install libssl-dev
+    sudo apt install libasound2-dev
+    sudo apt install libdbus-1-dev
 
     # Install homebrew
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
     test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-    echo "Changing default shell to zsh, prompting for password..."
-    chsh -s /bin/zsh
 elif [ $OS == "Darwin" ]; then
     brew update
     brew upgrade 
@@ -127,6 +134,7 @@ fi
 # Install shared brew packages
 brew reinstall jandedobbeleer/oh-my-posh/oh-my-posh
 brew reinstall jesseduffield/lazygit/lazygit
+brew reinstall spotify_player
 
 # Collect local and remote config dir names
 remote_names=$(fetch_dirs "${remote_dirs}")
