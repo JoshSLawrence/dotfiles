@@ -127,6 +127,7 @@ elif [ $OS == "Darwin" ]; then
     brew reinstall curl
     brew reinstall zsh-syntax-highlighting
     brew reinstall --cask ghostty
+    brew reinstall ripgrep
 else
     echo "$Red[ERROR]$Color_Off unknown operating system!"
 fi
