@@ -128,6 +128,7 @@ elif [ $OS == "Darwin" ]; then
     brew reinstall zsh-syntax-highlighting
     brew reinstall --cask ghostty
     brew reinstall ripgrep
+    brew reinstall bitwarden
 else
     echo "$Red[ERROR]$Color_Off unknown operating system!"
 fi
