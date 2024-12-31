@@ -126,6 +126,7 @@ elif [ $OS == "Darwin" ]; then
     brew reinstall ca-certificates
     brew reinstall curl
     brew reinstall zsh-syntax-highlighting
+    brew reinstall --cask ghostty
 else
     echo "$Red[ERROR]$Color_Off unknown operating system!"
 fi
