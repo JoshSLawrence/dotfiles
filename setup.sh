@@ -120,6 +120,12 @@ if [ $OS == "Linux" ]; then
     test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
     test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
+    # Install Nerd Font
+    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
+    sudo unzip JetBrainsMono.zip -d /usr/local/share/fonts/JetBrainsMono
+    sudo fc-cache -f -v
+    rm JetBrainsMono.zip
+
 elif [ $OS == "Darwin" ]; then
     brew update
     brew upgrade 
