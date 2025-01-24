@@ -101,6 +101,7 @@ OS=$(uname)
 if [ $OS == "Linux" ]; then
     sudo apt update -y
     sudo apt upgrade -y
+    sudo apt install curl
 
     sudo apt install zsh
     sudo apt install zsh-syntax-highlighting
@@ -140,8 +141,11 @@ else
 fi
 
 
+
 # Install shared brew packages
+brew tap jandedobbeleer/oh-my-posh
 brew reinstall jandedobbeleer/oh-my-posh/oh-my-posh
+brew tap jesseduffield/lazygit
 brew reinstall jesseduffield/lazygit/lazygit
 brew reinstall spotify_player
 
