@@ -96,6 +96,9 @@ detect_untracked(){
 #                          Lets get shit installed                                #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+git submodule init
+git submodule update
+
 OS=$(uname)
 
 if [ $OS == "Linux" ]; then
