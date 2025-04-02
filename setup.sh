@@ -45,7 +45,7 @@ Red='\033[0;31m'
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#         A bunch of helper functions - search for "Lets get shit installed"      # 
+#         A bunch of helper functions - search for "Lets get shit installed"      #
 #                          to see main execution area                             #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -104,107 +104,84 @@ OS=$(uname)
 if [ $OS == "Linux" ]; then
     sudo apt update -y
     sudo apt upgrade -y
-    sudo apt install curl
 
-    sudo apt install zsh
-    sudo apt install zsh-syntax-highlighting
+    # General dependencies
+    sudo apt install curl unzip ripgrep python3.12-venv zsh zsh-syntax-highlighting
+
+    # oh-my-posh
+    curl -s https://ohmyposh.dev/install.sh | bash -sk
+
+    # Install CommitMono Nerd Font
+    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/CommitMono.zip
+    sudo unzip CommitMono.zip -d /usr/local/share/fonts/CommitMono
+    sudo fc-cache -f -v
+    rm CommitMono.zip
+
+    # Install LazyGit
+    LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
+    curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+    tar xf lazygit.tar.gz lazygit
+    sudo install lazygit -D -t /usr/local/bin/
+
+    # Install terraform
+    wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+    sudo apt update && sudo apt install terraform
+
+    # Install Azure cli
+    curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+    # Change default shell to zsh
     echo "Changing default shell to zsh, prompting for password..."
     chsh -s /bin/zsh
 
-    # required for oh-my-posh
-    sudo apt install build-essential
-
-    # Dependencies for spotify_player
-    sudo apt install libssl-dev
-    sudo apt install libasound2-dev
-    sudo apt install libdbus-1-dev
-
-    # Install homebrew
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
-    test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
-    # Install Nerd Font
-    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
-    sudo unzip JetBrainsMono.zip -d /usr/local/share/fonts/JetBrainsMono
-    sudo fc-cache -f -v
-    rm JetBrainsMono.zip
-
-elif [ $OS == "Darwin" ]; then
-    brew update
-    brew upgrade 
-    brew reinstall ca-certificates
-    brew reinstall curl
-    brew reinstall zsh-syntax-highlighting
-    brew reinstall --cask ghostty
-    brew reinstall ripgrep
-    brew reinstall bitwarden
-else
-    echo "$Red[ERROR]$Color_Off unknown operating system!"
-fi
-
-
-
-# Install shared brew packages
-brew tap jandedobbeleer/oh-my-posh
-brew reinstall jandedobbeleer/oh-my-posh/oh-my-posh
-brew tap jesseduffield/lazygit
-brew reinstall jesseduffield/lazygit/lazygit
-brew reinstall spotify_player
-
-# Collect local and remote config dir names
-remote_names=$(fetch_dirs "${remote_dirs}")
-local_names=$(fetch_dirs "${local_dirs}")
-remote_root_dotfile_names=$(fetch_dirs "${remote_root_dotfiles}")
-# Install root dotfiles
-for dotfile in $remote_root_dotfile_names; do
-    rm -rf "$HOME/.$dotfile"
-
-    if [ $dotfile == "tmux" ]; then
-        rsync -rvc "./root/$dotfile/" "$HOME/.$dotfile"
-    else
-        rsync -rvc "./root/$dotfile" "$HOME/.$dotfile"
-    fi
-
-    # Check for bad exit code from copy
-    if [ $? -ne 0 ]; then
-        echo -e "\n$Red[Failed]$Color_Off local '.$dotfile' sync.\n"
-        exit
-    fi
-
-    echo -e "\n$Green[SUCCESS]$Color_Off local '.$dotfile' is in sync with remote.\n"
-done
-
-# Provision config
-for name in $remote_names; do
-    rm -rf "$local_config_dir/$name"
-    rsync -rvc --delete "$remote_config_dir/$name/" "$local_config_dir/$name/"
-
-    # Check for bad exit code by rsync
-    if [ $? -ne 0 ]; then
-        echo -e "\n$Red[Failed]$Color_Off local '.config/$name' sync.\n"
-        exit
-    fi
-
-    echo -e "\n$Green[SUCCESS]$Color_Off local '.config/$name' is in sync with remote.\n"
-done
-
-echo $OS
-
-if [ $OS == "Darwin" ]; then
-    echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> $HOME/.zshrc
-    echo 'eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/catppuccin_custom.omp.json)"' >> "$HOME/.zshrc"
-    echo "source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
-elif [ $OS == "Linux" ]; then
     echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> "$HOME/.zshrc"
     echo 'eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/catppuccin_custom.omp.json)"' >> "$HOME/.zshrc"
     echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
 else
-    echo "$Red[ERROR]$Color_Off unable to update .zshrc for unknown operating system!"
+    echo "$Red[ERROR]$Color_Off This setup script is for Linux only!"
 fi
 
-# Show local dirs not present in remote
-detect_untracked "${local_names}" "${remote_names}"
+# Collect local and remote config dir names
+# remote_names=$(fetch_dirs "${remote_dirs}")
+# local_names=$(fetch_dirs "${local_dirs}")
+# remote_root_dotfile_names=$(fetch_dirs "${remote_root_dotfiles}")
+
+# Install root dotfiles
+# for dotfile in $remote_root_dotfile_names; do
+#     rm -rf "$HOME/.$dotfile"
+#
+#     if [ $dotfile == "tmux" ]; then
+#         rsync -rvc "./root/$dotfile/" "$HOME/.$dotfile"
+#     else
+#         rsync -rvc "./root/$dotfile" "$HOME/.$dotfile"
+#     fi
+#
+#     # Check for bad exit code from copy
+#     if [ $? -ne 0 ]; then
+#         echo -e "\n$Red[Failed]$Color_Off local '.$dotfile' sync.\n"
+#         exit
+#     fi
+#
+#     echo -e "\n$Green[SUCCESS]$Color_Off local '.$dotfile' is in sync with remote.\n"
+# done
+#
+# # Provision config
+# for name in $remote_names; do
+#     rm -rf "$local_config_dir/$name"
+#     rsync -rvc --delete "$remote_config_dir/$name/" "$local_config_dir/$name/"
+#
+#     # Check for bad exit code by rsync
+#     if [ $? -ne 0 ]; then
+#         echo -e "\n$Red[Failed]$Color_Off local '.config/$name' sync.\n"
+#         exit
+#     fi
+#
+#     echo -e "\n$Green[SUCCESS]$Color_Off local '.config/$name' is in sync with remote.\n"
+# done
+#
+# # Show local dirs not present in remote
+# detect_untracked "${local_names}" "${remote_names}"
 
 # Done!
 echo -e "\n$Green[Complete]$Color_Off configuration syncd."
