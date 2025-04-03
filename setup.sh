@@ -164,6 +164,11 @@ if [ $OS == "Linux" ]; then
     rm nvim-linux-x86_64.tar.gz
     rm -rf nvim-linux-x86_64
 
+    # Install go programming language
+    wget https://go.dev/dl/go1.24.2.linux-amd64.tar.gz
+    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.24.2.linux-amd64.tar.gz
+    rm go1.24.2.linux-amd64.tar.gz
+
     # Install git credential manager
     wget https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.6.1/gcm-linux_amd64.2.6.1.tar.gz
     sudo tar -xzvf gcm-linux_amd64.2.6.1.tar.gz -C /usr/local/bin
