@@ -133,6 +133,12 @@ if [ $OS == "Linux" ]; then
     # Install Azure cli
     curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
+    # Install dotnet 8
+    wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
+    chmod +x ./dotnet-install.sh
+    ./dotnet-install.sh --version latest
+    rm dotnet-install.sh
+
     # Change default shell to zsh
     echo "Changing default shell to zsh, prompting for password..."
     chsh -s /bin/zsh
