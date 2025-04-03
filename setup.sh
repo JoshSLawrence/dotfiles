@@ -164,9 +164,6 @@ if [ $OS == "Linux" ]; then
     # Change default shell to zsh
     echo "Changing default shell to zsh, prompting for password..."
     chsh -s /bin/zsh
-
-    echo 'eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/catppuccin_custom.omp.json)"' >> "$HOME/.zshrc"
-    echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
 else
     echo "$Red[ERROR]$Color_Off This setup script is for Linux only!"
 fi
