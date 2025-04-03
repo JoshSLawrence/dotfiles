@@ -137,53 +137,11 @@ if [ $OS == "Linux" ]; then
     echo "Changing default shell to zsh, prompting for password..."
     chsh -s /bin/zsh
 
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> "$HOME/.zshrc"
     echo 'eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/catppuccin_custom.omp.json)"' >> "$HOME/.zshrc"
     echo "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
 else
     echo "$Red[ERROR]$Color_Off This setup script is for Linux only!"
 fi
-
-# Collect local and remote config dir names
-# remote_names=$(fetch_dirs "${remote_dirs}")
-# local_names=$(fetch_dirs "${local_dirs}")
-# remote_root_dotfile_names=$(fetch_dirs "${remote_root_dotfiles}")
-
-# Install root dotfiles
-# for dotfile in $remote_root_dotfile_names; do
-#     rm -rf "$HOME/.$dotfile"
-#
-#     if [ $dotfile == "tmux" ]; then
-#         rsync -rvc "./root/$dotfile/" "$HOME/.$dotfile"
-#     else
-#         rsync -rvc "./root/$dotfile" "$HOME/.$dotfile"
-#     fi
-#
-#     # Check for bad exit code from copy
-#     if [ $? -ne 0 ]; then
-#         echo -e "\n$Red[Failed]$Color_Off local '.$dotfile' sync.\n"
-#         exit
-#     fi
-#
-#     echo -e "\n$Green[SUCCESS]$Color_Off local '.$dotfile' is in sync with remote.\n"
-# done
-#
-# # Provision config
-# for name in $remote_names; do
-#     rm -rf "$local_config_dir/$name"
-#     rsync -rvc --delete "$remote_config_dir/$name/" "$local_config_dir/$name/"
-#
-#     # Check for bad exit code by rsync
-#     if [ $? -ne 0 ]; then
-#         echo -e "\n$Red[Failed]$Color_Off local '.config/$name' sync.\n"
-#         exit
-#     fi
-#
-#     echo -e "\n$Green[SUCCESS]$Color_Off local '.config/$name' is in sync with remote.\n"
-# done
-#
-# # Show local dirs not present in remote
-# detect_untracked "${local_names}" "${remote_names}"
 
 # Done!
 echo -e "\n$Green[Complete]$Color_Off configuration syncd."
