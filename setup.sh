@@ -160,6 +160,9 @@ if [ $OS == "Linux" ]; then
     wget https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.6.1/gcm-linux_amd64.2.6.1.tar.gz
     sudo tar -xzvf gcm-linux_amd64.2.6.1.tar.gz -C /usr/local/bin
     rm gcm-linux_amd64.2.6.1.tar.gz
+    git config --global user.name "Josh Lawrence"
+    git config --global user.email "josh.stephen.lawrence@gmail.com"
+    git-credential-manager configure
 
     # Change default shell to zsh
     echo "Changing default shell to zsh, prompting for password..."
