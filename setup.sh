@@ -112,10 +112,10 @@ if [ $OS == "Linux" ]; then
     curl -s https://ohmyposh.dev/install.sh | bash -sk
 
     # Install CommitMono Nerd Font
-    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/CommitMono.zip
-    sudo unzip CommitMono.zip -d /usr/local/share/fonts/CommitMono
+    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
+    sudo unzip JetBrainsMono.zip -d /usr/local/share/fonts/JetBrainsMono.zip
     sudo fc-cache -f -v
-    rm CommitMono.zip
+    rm JetBrainsMono.zip
 
     # Install LazyGit
     LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
