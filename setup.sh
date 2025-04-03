@@ -139,6 +139,16 @@ if [ $OS == "Linux" ]; then
     ./dotnet-install.sh --version latest
     rm dotnet-install.sh
 
+    # Install node and npm
+    wget https://nodejs.org/dist/v22.14.0/node-v22.14.0-linux-x64.tar.xz
+    tar -xvf node-v22.14.0-linux-x64.tar.xz
+    cp node-v22.14.0-linux-x64/bin /usr/bin -r
+    cp node-v22.14.0-linux-x64/lib /usr/lib -r
+    cp node-v22.14.0-linux-x64/share /usr/share -r
+    cp node-v22.14.0-linux-x64/include /usr/include -r
+    rm node-v22.14.0-linux-x64.tar.xz
+    rm -rf node-v22.14.0-linux-x64
+
     # Change default shell to zsh
     echo "Changing default shell to zsh, prompting for password..."
     chsh -s /bin/zsh
