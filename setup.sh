@@ -142,10 +142,10 @@ if [ $OS == "Linux" ]; then
     # Install node and npm
     wget https://nodejs.org/dist/v22.14.0/node-v22.14.0-linux-x64.tar.xz
     tar -xvf node-v22.14.0-linux-x64.tar.xz
-    cp node-v22.14.0-linux-x64/bin /usr/bin -r
-    cp node-v22.14.0-linux-x64/lib /usr/lib -r
-    cp node-v22.14.0-linux-x64/share /usr/share -r
-    cp node-v22.14.0-linux-x64/include /usr/include -r
+    sudo cp node-v22.14.0-linux-x64/bin /usr -r
+    sudo cp node-v22.14.0-linux-x64/lib /usr -r
+    sudo cp node-v22.14.0-linux-x64/share /usr -r
+    sudo cp node-v22.14.0-linux-x64/include /usr -r
     rm node-v22.14.0-linux-x64.tar.xz
     rm -rf node-v22.14.0-linux-x64
 
