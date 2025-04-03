@@ -167,6 +167,9 @@ if [ $OS == "Linux" ]; then
     # Change default shell to zsh
     echo "Changing default shell to zsh, prompting for password..."
     chsh -s /bin/zsh
+
+    # Place config files
+    cp linux/. $HOME/. -r
 else
     echo "$Red[ERROR]$Color_Off This setup script is for Linux only!"
 fi
