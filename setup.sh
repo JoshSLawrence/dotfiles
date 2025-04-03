@@ -106,7 +106,7 @@ if [ $OS == "Linux" ]; then
     sudo apt upgrade -y
 
     # General dependencies
-    sudo apt install curl unzip ripgrep python3.12-venv zsh zsh-syntax-highlighting gcc
+    sudo apt install curl unzip ripgrep python3.12-venv zsh zsh-syntax-highlighting gcc libice6 libsm6
 
     # oh-my-posh
     curl -s https://ohmyposh.dev/install.sh | bash -sk
@@ -148,6 +148,11 @@ if [ $OS == "Linux" ]; then
     cp node-v22.14.0-linux-x64/include /usr/include -r
     rm node-v22.14.0-linux-x64.tar.xz
     rm -rf node-v22.14.0-linux-x64
+
+    # Install git credential manager
+    wget https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.6.1/gcm-linux_amd64.2.6.1.tar.gz
+    sudo tar -xzvf gcm-linux_amd64.2.6.1.tar.gz -C /usr/local/bin
+    rm gcm-linux_amd64.2.6.1.tar.gz
 
     # Change default shell to zsh
     echo "Changing default shell to zsh, prompting for password..."
