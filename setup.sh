@@ -149,6 +149,13 @@ if [ $OS == "Linux" ]; then
     rm node-v22.14.0-linux-x64.tar.xz
     rm -rf node-v22.14.0-linux-x64
 
+    # Install neovim
+    wget https://github.com/neovim/neovim/releases/download/v0.11.0/nvim-linux-x86_64.tar.gz
+    tar -xzvf nvim-linux-x86_64.tar.gz
+    cp nvim-linux-x86_64/. /usr/. -r
+    rm nvim-linux-x86_64.tar.gz
+    rm -rf nvim-linux-x86_64
+
     # Install git credential manager
     wget https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.6.1/gcm-linux_amd64.2.6.1.tar.gz
     sudo tar -xzvf gcm-linux_amd64.2.6.1.tar.gz -C /usr/local/bin
