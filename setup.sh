@@ -106,7 +106,7 @@ if [ $OS == "Linux" ]; then
     sudo apt upgrade -y
 
     # General dependencies
-    sudo apt install curl unzip ripgrep python3.12-venv zsh zsh-syntax-highlighting gcc libice6 libsm6
+    sudo apt install curl unzip ripgrep python3.12-venv zsh zsh-syntax-highlighting gcc libice6 libsm6 xclip
 
     # oh-my-posh
     curl -s https://ohmyposh.dev/install.sh | bash -sk
