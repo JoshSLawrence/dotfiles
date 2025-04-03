@@ -2,3 +2,4 @@ export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 export NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
 export PATH=$PATH:$HOME/.local/bin
 export GCM_CREDENTIAL_STORE=cache
+export PATH=$PATH:$HOME/.dotnet
