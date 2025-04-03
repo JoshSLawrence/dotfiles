@@ -111,6 +111,14 @@ if [ $OS == "Linux" ]; then
     # oh-my-posh
     curl -s https://ohmyposh.dev/install.sh | bash -sk
 
+    # Install fzf - optional dependency for zoxide
+    wget https://github.com/junegunn/fzf/releases/download/v0.61.0/fzf-0.61.0-linux_amd64.tar.gz
+    sudo tar -C /usr/local/bin -xzf fzf-0.61.0-linux_amd64.tar.gz
+    rm fzf-0.61.0-linux_amd64.tar.gz
+
+    # Install zoxide
+    curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+
     # Install CommitMono Nerd Font
     wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
     sudo unzip JetBrainsMono.zip -d /usr/local/share/fonts/JetBrainsMono.zip
