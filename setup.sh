@@ -152,7 +152,7 @@ if [ $OS == "Linux" ]; then
     # Install neovim
     wget https://github.com/neovim/neovim/releases/download/v0.11.0/nvim-linux-x86_64.tar.gz
     tar -xzvf nvim-linux-x86_64.tar.gz
-    cp nvim-linux-x86_64/. /usr/. -r
+    sudo cp nvim-linux-x86_64/. /usr/. -r
     rm nvim-linux-x86_64.tar.gz
     rm -rf nvim-linux-x86_64
 
