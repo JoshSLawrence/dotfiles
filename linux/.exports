@@ -3,4 +3,7 @@ export NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
 export PATH=$PATH:$HOME/.local/bin
 export GCM_CREDENTIAL_STORE=cache
 export PATH=$PATH:$HOME/.dotnet
+export PATH=$PATH:$HOME/.dotnet/tools
 export PATH=$PATH:/usr/local/go/bin
+export DOTNET_ROOT="$HOME/.dotnet"
+export GPG_TTY=$(tty)
