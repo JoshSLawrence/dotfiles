@@ -147,6 +147,17 @@ if [ $OS == "Linux" ]; then
     ./dotnet-install.sh --version latest
     rm dotnet-install.sh
 
+    # Install PowerShell 7
+    # from: https://learn.microsoft.com/en-us/powershell/scripting/install/install-ubuntu?view=powershell-7.5
+    sudo apt-get update
+    sudo apt-get install -y wget apt-transport-https software-properties-common
+    source /etc/os-release
+    wget -q https://packages.microsoft.com/config/ubuntu/$VERSION_ID/packages-microsoft-prod.deb
+    sudo dpkg -i packages-microsoft-prod.deb
+    rm packages-microsoft-prod.deb
+    sudo apt-get update
+    sudo apt-get install -y powershell
+
     # Install node and npm
     wget https://nodejs.org/dist/v22.14.0/node-v22.14.0-linux-x64.tar.xz
     tar -xvf node-v22.14.0-linux-x64.tar.xz
