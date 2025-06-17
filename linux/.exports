@@ -10,3 +10,4 @@ export GPG_TTY=$(tty)
 export PATH="$PATH:$HOME/.dotnet/tools"
 export PATH="$PATH:$HOME/.local/share/nvim/mason/bin"
 export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
