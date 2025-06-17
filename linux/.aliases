@@ -1,6 +1,6 @@
 alias ll='ls -l'
 alias la='ls -la'
-alias vim='nvim'
+alias vim='/usr/local/bin/nvim'
 alias tf='terraform'
 alias python='python3'
 alias newvenv='python3 -m venv .venv'
