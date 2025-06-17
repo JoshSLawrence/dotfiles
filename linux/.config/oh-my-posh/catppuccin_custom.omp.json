@@ -1,32 +1,72 @@
 {
   "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
   "palette": {
-    "os": "#ACB0BE",
-        "closer": "p:os",
-    "pink": "#F5BDE6",
+    "blue": "#8AADF4",
+    "closer": "p:os",
     "lavender": "#B7BDF8",
-    "blue": "#8AADF4"
+    "os": "#ACB0BE",
+    "pink": "#F5BDE6",
+    "green": "#a6e3a1",
+    "yellow": "#f9e2af",
+    "peach": "#fab387",
+    "flamingo": "#f2cdcd"
+  },
+  "transient_prompt": {
+    "template": "❯ ",
+    "foreground": "magenta",
+    "background": "transparent"
   },
   "blocks": [
     {
+      "type": "prompt",
       "alignment": "left",
-      "newline": true,
       "segments": [
         {
-          "foreground": "p:lavender",
+          "type": "kubectl",
+          "style": "plain",
+          "foreground": "p:blue",
+          "template": "- ⎈ "
+        },
+        {
+          "type": "kubectl",
+          "style": "plain",
+          "foreground": "p:blue",
+          "template": "{{.Context}} "
+        },
+        {
+          "type": "kubectl",
+          "style": "plain",
+          "template": "{{if .Namespace}}in{{end}} "
+        },
+        {
+          "type": "kubectl",
+          "style": "plain",
+          "foreground": "p:green",
+          "template": "{{if .Namespace}}({{.Namespace}}){{end}} "
+        }
+      ],
+      "newline": true
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
           "properties": {
+            "cache_duration": "none",
             "folder_icon": "..\ue5fe..",
             "home_icon": "~",
             "style": "agnoster_short"
           },
-          "style": "plain",
           "template": "{{ .Path }} ",
-          "type": "path"
+          "foreground": "p:lavender",
+          "type": "path",
+          "style": "plain"
         },
         {
-          "foreground": "p:pink",
           "properties": {
             "branch_icon": "\ue725 ",
+            "cache_duration": "none",
             "cherry_pick_icon": "\ue29b ",
             "commit_icon": "\uf417 ",
             "fetch_status": false,
@@ -38,41 +78,41 @@
             "tag_icon": "\uf412 "
           },
           "template": "{{ .HEAD }} ",
-          "style": "plain",
-          "type": "git"
+          "foreground": "p:pink",
+          "type": "git",
+          "style": "plain"
         },
         {
-          "type": "python",
-          "template": "{{ if .Venv }}({{ .Venv }}){{ end }}", 
           "properties": {
-            "fetch_virtual_env": true,
+            "cache_duration": "none",
             "display_default": false,
+            "fetch_virtual_env": true,
             "folder_name_fallback": false
-          }
+          },
+          "template": "{{ if .Venv }}({{ .Venv }}){{ end }}",
+          "type": "python"
         }
       ],
-      "type": "prompt"
+      "newline": true
     },
     {
+      "type": "prompt",
       "alignment": "left",
-      "newline": true,
       "segments": [
         {
-          "type": "text",
-          "style": "plain",
+          "properties": {
+            "cache_duration": "none"
+          },
+          "template": "❯",
           "foreground": "p:pink",
           "background": "transparent",
-          "template": "❯"
+          "type": "text",
+          "style": "plain"
         }
       ],
-      "type": "prompt"
+      "newline": true
     }
   ],
-  "transient_prompt": {
-    "foreground": "magenta",
-    "background": "transparent",
-    "template": "❯ "
-  },
-  "final_space": true,
-  "version": 2
+  "version": 3,
+  "final_space": true
 }
