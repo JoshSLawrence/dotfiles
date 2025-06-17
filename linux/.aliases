@@ -8,5 +8,6 @@ alias activate='source .venv/bin/activate'
 alias py='python3'
 alias lg='lazygit'
 alias gat='pwsh ~/source/github/snippets/GetEntraAccessToken.ps1'
+alias myip='curl -w "\n" "https://ipinfo.io/ip"'
 alias kubectl=kubecolor
 alias kube=kubectl
