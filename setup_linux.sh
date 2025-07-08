@@ -286,15 +286,13 @@ if [ $OS == "Linux" ]; then
     # Change default shell to zsh
     echo "Changing default shell to zsh, prompting for password..."
     chsh -s /bin/zsh
-    echo "${GREEN}Done${NOCOLOR}"
+    echo -e "${GREEN}Done${NOCOLOR}"
 
     # Check tracked configs before wrapping up
     detect_untracked "$LOCAL_CONFIG" "$DOTFILES_CONFIG"
 
     # Done!
-    echo
-    echo -e "${GREEN}[Complete]${NOCOLOR} configuration syncd."
-    echo
+    echo -e "${GREEN}[Complete]${NOCOLOR} configuration syncd.\n"
     echo -e "Don't forget to logout to change shells or source your ~/.zshrc!"
 else
     echo "${RED}[ERROR]${NOCOLOR} This setup script is for Linux only!"
