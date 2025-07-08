@@ -107,17 +107,21 @@ detect_untracked() {
     # Iterate through $1 and compare against $2
     # If a dir in $1 is not present in $2, these means it is not 
     # in the dotfiles repo, warn the user if they wish it to be in repo
-    echo
+    echo -e "${YELLOW}Checking for untracked configuration in $HOME/.config${NOCOLOR}\n"
+
+    LOCAL_CONFIG=$(find "$HOME/.config" -mindepth 1 -maxdepth 1)
+    DOTFILES_CONFIG=$(find "$WORKING_DIR/linux/.config" -mindepth 1 -maxdepth 1)
+    CONFIGNORE="./.confignore"
 
     all_tracked=true
     
     # Read .confignore into an array
     mapfile -t confignore < $CONFIGNORE
 
-    for i in $1; do
+    for i in $LOCAL_CONFIG; do
         tracked=false
 
-        for e in $2; do
+        for e in $DOTFILES_CONFIG; do
             if [ "$(basename $i)" = "$(basename $e)" ]; then
                 tracked=true
                 break
@@ -138,11 +142,8 @@ detect_untracked() {
     done
     
     if [ $all_tracked = false ]; then
-        echo -e "
-To suppress these warnings, add the directories to
-the ${GREEN}.confignore${NOCOLOR} file in repo.
-Otherwise, commit the missing configuration to the repo.
-        "
+        echo -e "\nTo suppress these warnings, add the directories to the ${GREEN}.confignore${NOCOLOR} file in repo."
+        echo -e "Otherwise, commit the missing configuration to the repo.\n"
     else
         echo -e "${GREEN}All configuration in the local system is being tracked.${NOCOLOR}\n"
     fi
