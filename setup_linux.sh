@@ -30,8 +30,10 @@
 # Ensure we start outfrom the root of the dotfiles repo directory
 cd "$(dirname "$0")"
 
-LOCAL_CONFIG=$(find "$HOME/.config" -mindepth 1 -maxdepth 1 -type d)
-DOTFILES_CONFIG=$(find "./linux/.config" -mindepth 1 -maxdepth 1 -type d)
+WORKING_DIR=$(pwd)
+
+LOCAL_CONFIG=$(find "$HOME/.config" -mindepth 1 -maxdepth 1 \( -type d -o -type l \))
+DOTFILES_CONFIG=$(find "$WORKING_DIR/linux/.config" -mindepth 1 -maxdepth 1 -type d)
 CONFIGNORE="./.confignore"
 
 # Colors for string formatting
@@ -46,19 +48,24 @@ RED='\033[0;31m'
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 link_config() {
-    cd "$HOME/.config"
-    for local_config in $1; do
-        for repo_config in $2; do
-            if [ "$(basename $local_config)" = "$(basename $repo_config)" ]; then
-                echo "$local_config"
-                # rm -rf $local_config
-                # ln -s "$repo_config" "$(basename $repo_config)"
-                echo -e "${GREEN}[Linked]${NOCOLOR} $local_config -> $repo_config"
-                break
+    for repo_config in $1; do
+        for local_config in $2; do
+            if [ "$(basename $repo_config)" = "$(basename $local_config)" ]; then
+                rm -rf $local_config
+                echo -e "${RED}[REMOVED]${NOCOLOR} $local_config"
             fi
-        done
+	    done
     done
-    cd -
+
+    for repo_config in $1; do
+	    ln -s $repo_config "$HOME/.config/$(basename $repo_config)"
+
+        if [ $? = 0 ]; then
+             echo -e "${GREEN}[Linked]${NOCOLOR} "$HOME/.config/$(basename $repo_config)" -> $repo_config"
+        else
+             echo -e "${RED}[LINK FAILED]${NOCOLOR} "$HOME/.config/$(basename $repo_config)" -> $repo_config"
+        fi
+    done
 }
 
 detect_untracked() {
@@ -112,13 +119,14 @@ Otherwise, commit the missing configuration to the repo.
 #                        Lets get shit installed                              #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-
-git submodule init
-git submodule update
-
 OS=$(uname)
 
 if [ $OS == "Linux" ]; then
+    git submodule init
+    git submodule update
+
+    link_config "$DOTFILES_CONFIG" "$LOCAL_CONFIG"
+
     sudo apt update -y
     sudo apt upgrade -y
 
@@ -240,6 +248,8 @@ if [ $OS == "Linux" ]; then
     git config --global user.name "Josh Lawrence"
     git config --global user.email "josh@joshlawrence.dev"
 
+    # Symlink config directories to local system
+    link_config "$LOCAL_CONFIG" "$DOTFILES_CONFIG"
 
     # Change default shell to zsh
     echo "Changing default shell to zsh, prompting for password..."
