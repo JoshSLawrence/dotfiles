@@ -159,6 +159,15 @@ if [ $OS == "Linux" ]; then
     git submodule init
     git submodule update
 
+    # If the arg 'full' is not passed, sync dotfiles only (due to the exit)
+    # So, a consumer should pass the arg 'full' for this entire script to run
+    if [ "$1" != "full" ]; then
+        link_config
+        detect_untracked 
+        echo -e "${GREEN}[Complete]${NOCOLOR} configuration syncd.\n"
+        exit
+    fi
+
     sudo apt update -y
     sudo apt upgrade -y
 
