@@ -189,7 +189,7 @@ if [ $OS == "Linux" ]; then
     asdf plugin add opentofu https://github.com/virtualroot/asdf-opentofu.git
 
     # Install asdf tools (uses the .tools-versions found in dotfiles repo)
-    run asdf install
+    asdf install
 
     # Install kubecolor
     wget -O /tmp/kubecolor.deb https://kubecolor.github.io/packages/deb/pool/main/k/kubecolor/kubecolor_$(wget -q -O- https://kubecolor.github.io/packages/deb/version)_$(dpkg --print-architecture).deb
