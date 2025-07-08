@@ -35,6 +35,8 @@ WORKING_DIR=$(pwd)
 LOCAL_CONFIG=$(find "$HOME/.config" -mindepth 1 -maxdepth 1 \( -type d -o -type l \))
 DOTFILES_CONFIG=$(find "$WORKING_DIR/linux/.config" -mindepth 1 -maxdepth 1 -type d)
 CONFIGNORE="./.confignore"
+mkdir -p $HOME/.config
+mkdir -p $HOME/.local/bin
 
 # Colors for string formatting
 NOCOLOR='\033[0m'
@@ -48,6 +50,8 @@ RED='\033[0;31m'
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 link_config() {
+    echo
+
     for repo_config in $1; do
         for local_config in $2; do
             if [ "$(basename $repo_config)" = "$(basename $local_config)" ]; then
@@ -58,7 +62,7 @@ link_config() {
     done
 
     for repo_config in $1; do
-	    ln -s $repo_config "$HOME/.config/$(basename $repo_config)"
+        ln -s $repo_config "$HOME/.config/$(basename $repo_config)"
 
         if [ $? = 0 ]; then
              echo -e "${GREEN}[Linked]${NOCOLOR} "$HOME/.config/$(basename $repo_config)" -> $repo_config"
@@ -66,6 +70,8 @@ link_config() {
              echo -e "${RED}[LINK FAILED]${NOCOLOR} "$HOME/.config/$(basename $repo_config)" -> $repo_config"
         fi
     done
+
+    echo
 }
 
 detect_untracked() {
@@ -124,8 +130,6 @@ OS=$(uname)
 if [ $OS == "Linux" ]; then
     git submodule init
     git submodule update
-
-    link_config "$DOTFILES_CONFIG" "$LOCAL_CONFIG"
 
     sudo apt update -y
     sudo apt upgrade -y
@@ -249,7 +253,7 @@ if [ $OS == "Linux" ]; then
     git config --global user.email "josh@joshlawrence.dev"
 
     # Symlink config directories to local system
-    link_config "$LOCAL_CONFIG" "$DOTFILES_CONFIG"
+    link_config "$DOTFILES_CONFIG" "$LOCAL_CONFIG"
 
     # Change default shell to zsh
     echo "Changing default shell to zsh, prompting for password..."
@@ -260,8 +264,10 @@ if [ $OS == "Linux" ]; then
     detect_untracked "$LOCAL_CONFIG" "$DOTFILES_CONFIG"
 
     # Done!
-    echo -e "\n${GREEN}[Complete]${NOCOLOR} configuration syncd."
-    echo -e "\nDon't forget to logout to change shells or source your ~/.zshrc!"
+    echo
+    echo -e "${GREEN}[Complete]${NOCOLOR} configuration syncd."
+    echo
+    echo -e "Don't forget to logout to change shells or source your ~/.zshrc!"
 else
     echo "${RED}[ERROR]${NOCOLOR} This setup script is for Linux only!"
 fi
