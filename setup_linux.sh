@@ -174,7 +174,7 @@ if [ $OS == "Linux" ]; then
     # General dependencies
     sudo apt install curl unzip ripgrep python3.12-venv \
         zsh zsh-syntax-highlighting gcc libice6 libsm6 xclip fd-find make \
-        fortune-mod -y
+        fortune-mod apt-transport-https -y
 
     # Install asdf version 0.18.0
     wget -O asdf.tar.gz https://github.com/asdf-vm/asdf/releases/download/v0.18.0/asdf-v0.18.0-linux-amd64.tar.gz
@@ -189,7 +189,12 @@ if [ $OS == "Linux" ]; then
     asdf plugin add opentofu https://github.com/virtualroot/asdf-opentofu.git
 
     # Install asdf tools (uses the .tools-versions found in dotfiles repo)
-    run asdf install
+    asdf install
+
+    # Install kubecolor
+    wget -O /tmp/kubecolor.deb https://kubecolor.github.io/packages/deb/pool/main/k/kubecolor/kubecolor_$(wget -q -O- https://kubecolor.github.io/packages/deb/version)_$(dpkg --print-architecture).deb
+    sudo dpkg -i /tmp/kubecolor.deb
+    sudo apt update
 
     # Install Krew (kubectl extension)
     (
