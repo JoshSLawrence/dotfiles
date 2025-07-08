@@ -7,3 +7,4 @@ eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/catppuccin_custom.
 eval "$(zoxide init zsh)"
 export GROFF_NO_SGR=1
 export MANPAGER="nvim +Man!"
+fortune | cowsay
