@@ -30,64 +30,82 @@
 # Ensure we start outfrom the root of the dotfiles repo directory
 cd "$(dirname "$0")"
 
-local_config_dir="$HOME/.config"
-remote_config_dir="./config"
-local_dirs=$(find $local_config_dir -mindepth 1 -maxdepth 1 -type d)
-remote_dirs=$(find "./config" -mindepth 1 -maxdepth 1 -type d)
-remote_root_dotfiles=$(find "./root" -mindepth 1 -maxdepth 1)
+LOCAL_CONFIG=$(find "$HOME/.config" -mindepth 1 -maxdepth 1 -type d)
+DOTFILES_CONFIG=$(find "./linux/.config" -mindepth 1 -maxdepth 1 -type d)
+CONFIGNORE="./.confignore"
 
 # Colors for string formatting
-Color_Off='\033[0m'
-Green='\033[0;32m'
-Yellow='\033[0;33m'
-Red='\033[0;31m'
+NOCOLOR='\033[0m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RED='\033[0;31m'
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #      A bunch of helper functions - search for "Lets get shit installed"     #
 #                          to see main execution area                         #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-
-
-strip_dir_name(){
-    # Dont add this repo to scope
-    if [ $1 == "./.git" ]; then
-        return
-    fi
-
-    echo "$(basename "$1")"
-}
-
-fetch_dirs(){
-    names=()
-
-    for dir in $1; do
-        name=$(strip_dir_name $dir)
-        names+=("${name}")
+link_config() {
+    cd "$HOME/.config"
+    for local_config in $1; do
+        for repo_config in $2; do
+            if [ "$(basename $local_config)" = "$(basename $repo_config)" ]; then
+                echo "$local_config"
+                # rm -rf $local_config
+                # ln -s "$repo_config" "$(basename $repo_config)"
+                echo -e "${GREEN}[Linked]${NOCOLOR} $local_config -> $repo_config"
+                break
+            fi
+        done
     done
-
-    echo "${names[@]}"
+    cd -
 }
 
-detect_untracked(){
-    for i in $1; do
-        if [ $i == "nvim" ]; then
-            continue
-        fi
+detect_untracked() {
+    # arg $1 is a list of directories on the local system
+    # arg $2 is a list of directories in the dotfiles repo
+    # Iterate through $1 and compare against $2
+    # If a dir in $1 is not present in $2, these means it is not 
+    # in the dotfiles repo, warn the user if they wish it to be in repo
+    echo
 
+    all_tracked=true
+    
+    # Read .confignore into an array
+    mapfile -t confignore < $CONFIGNORE
+
+    for i in $1; do
         tracked=false
 
         for e in $2; do
-            if [ $i == $e ]; then
+            if [ "$(basename $i)" = "$(basename $e)" ]; then
                 tracked=true
                 break
             fi
         done
 
-        if [ $tracked == false ]; then
-        echo -e "$Yellow[WARNING]$Color_Off local config '$i' is not tracked"
+        for w in "${confignore[@]}"; do
+            if [ "$(basename $i)" = "$(basename $w)" ]; then
+                tracked=true
+                break
+            fi
+        done
+
+        if [ $tracked = false ]; then
+            all_tracked=false
+            echo -e "${YELLOW}[WARNING]${NOCOLOR} local config ${GREEN}'$i'${NOCOLOR} ${YELLOW}is not tracked${NOCOLOR}"
         fi
     done
+    
+    if [ $all_tracked = false ]; then
+        echo -e "
+To suppress these warnings, add the directories to
+the ${GREEN}.confignore${NOCOLOR} file in repo.
+Otherwise, commit the missing configuration to the repo.
+        "
+    else
+        echo -e "${GREEN}All configuration in the local system is being tracked.${NOCOLOR}\n"
+    fi
 }
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -194,10 +212,9 @@ if [ $OS == "Linux" ]; then
 
     # Place config files
     cp linux/. $HOME/. -r
+    # Done!
+    echo -e "\n${GREEN}[Complete]${NOCOLOR} configuration syncd."
+    echo -e "\nDon't forget to logout to change shells or source your ~/.zshrc!"
 else
-    echo "$Red[ERROR]$Color_Off This setup script is for Linux only!"
+    echo "${RED}[ERROR]${NOCOLOR} This setup script is for Linux only!"
 fi
-
-# Done!
-echo -e "\n$Green[Complete]$Color_Off configuration syncd."
-echo -e "\nDon't forget to logout to change shells or source your ~/.zshrc!"
