@@ -250,7 +250,7 @@ if [ $OS == "Linux" ]; then
     # Install dotnet latest (9 at the time of commit)
     wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
     chmod +x ./dotnet-install.sh
-    ./dotnet-install.sh --version latest
+    ./dotnet-install.sh --channel 9.0 --version latest
     rm dotnet-install.sh
 
     # Install PowerShell 7
