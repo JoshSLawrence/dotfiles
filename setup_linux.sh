@@ -29,12 +29,8 @@
 
 # Ensure we start outfrom the root of the dotfiles repo directory
 cd "$(dirname "$0")"
-
 WORKING_DIR=$(pwd)
 
-LOCAL_CONFIG=$(find "$HOME/.config" -mindepth 1 -maxdepth 1 \( -type d -o -type l \))
-DOTFILES_CONFIG=$(find "$WORKING_DIR/linux/.config" -mindepth 1 -maxdepth 1 -type d)
-CONFIGNORE="./.confignore"
 mkdir -p $HOME/.config
 mkdir -p $HOME/.local/bin
 
@@ -50,28 +46,60 @@ RED='\033[0;31m'
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 link_config() {
-    echo
+    echo -e "${YELLOW}\nLinking configuration to the local system${NOCOLOR}\n"
 
-    for repo_config in $1; do
-        for local_config in $2; do
-            if [ "$(basename $repo_config)" = "$(basename $local_config)" ]; then
-                rm -rf $local_config
-                echo -e "${RED}[REMOVED]${NOCOLOR} $local_config"
-            fi
-	    done
+    LOCAL_CONFIG=$(find "$HOME/.config" -mindepth 1 -maxdepth 1)
+    DOTFILES_CONFIG=$(find "$WORKING_DIR/linux/.config" -mindepth 1 -maxdepth 1 -type d)
+    DOTFILES_ROOT=$(find "$WORKING_DIR/linux" -mindepth 1 -maxdepth 1)
+    CONFIGNORE="./.confignore"
+
+    # Remove root config in $HOME
+    # Skipping over the .config directory
+    for config in $DOTFILES_ROOT; do
+        if [ $(basename $config) = ".config" ]; then
+            continue
+        fi
+	    rm -rf "$HOME/$(basename $config)"
+        echo -e "${RED}[REMOVED]${NOCOLOR} $HOME/$(basename $config)"
     done
 
-    for repo_config in $1; do
-        ln -s $repo_config "$HOME/.config/$(basename $repo_config)"
+    # Remove config in $HOME/.config
+    for config in $DOTFILES_CONFIG; do
+	    rm -rf "$HOME/.config/$(basename $config)"
+        echo -e "${RED}[REMOVED]${NOCOLOR} $HOME/.config/$(basename $config)"
+    done
+
+    # Adds bit of separationg between console logged removals/links
+    echo
+
+    # Sym link root config for $HOME
+    # Skipping over the .config directory
+    for config in $DOTFILES_ROOT; do
+        if [ $(basename $config) = ".config" ]; then
+            continue
+        fi
+
+        ln -s $config "$HOME/$(basename $config)"
 
         if [ $? = 0 ]; then
-             echo -e "${GREEN}[Linked]${NOCOLOR} "$HOME/.config/$(basename $repo_config)" -> $repo_config"
+             echo -e "${GREEN}[LINKED]${NOCOLOR} "$HOME/$(basename $config)" -> $config"
         else
-             echo -e "${RED}[LINK FAILED]${NOCOLOR} "$HOME/.config/$(basename $repo_config)" -> $repo_config"
+             echo -e "${RED}[LINK FAILED]${NOCOLOR} "$HOME/$(basename $config)" -> $config"
         fi
     done
 
-    echo
+    # Sym link config for $HOME/.config
+    for config in $DOTFILES_CONFIG; do
+        ln -s $config "$HOME/.config/$(basename $config)"
+
+        if [ $? = 0 ]; then
+             echo -e "${GREEN}[LINKED]${NOCOLOR} "$HOME/.config/$(basename $config)" -> $config"
+        else
+             echo -e "${RED}[LINK FAILED]${NOCOLOR} "$HOME/.config/$(basename $config)" -> $config"
+        fi
+    done
+
+    echo -e "${GREEN}\nLinking complete${NOCOLOR}\n"
 }
 
 detect_untracked() {
@@ -253,7 +281,7 @@ if [ $OS == "Linux" ]; then
     git config --global user.email "josh@joshlawrence.dev"
 
     # Symlink config directories to local system
-    link_config "$DOTFILES_CONFIG" "$LOCAL_CONFIG"
+    link_config
 
     # Change default shell to zsh
     echo "Changing default shell to zsh, prompting for password..."
