@@ -174,7 +174,7 @@ if [ $OS == "Linux" ]; then
     # General dependencies
     sudo apt install curl unzip ripgrep python3.12-venv \
         zsh zsh-syntax-highlighting gcc libice6 libsm6 xclip fd-find make \
-        fortune-mod
+        fortune-mod -y
 
     # Install asdf version 0.18.0
     wget -O asdf.tar.gz https://github.com/asdf-vm/asdf/releases/download/v0.18.0/asdf-v0.18.0-linux-amd64.tar.gz
@@ -295,7 +295,6 @@ if [ $OS == "Linux" ]; then
     # Change default shell to zsh
     echo "Changing default shell to zsh, prompting for password..."
     chsh -s /bin/zsh
-    echo -e "${GREEN}Done${NOCOLOR}"
 
     # Check tracked configs before wrapping up
     detect_untracked "$LOCAL_CONFIG" "$DOTFILES_CONFIG"
