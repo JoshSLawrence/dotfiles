@@ -49,9 +49,8 @@ link_config() {
     echo -e "${YELLOW}\nLinking configuration to the local system${NOCOLOR}\n"
 
     LOCAL_CONFIG=$(find "$HOME/.config" -mindepth 1 -maxdepth 1)
-    DOTFILES_CONFIG=$(find "$WORKING_DIR/linux/.config" -mindepth 1 -maxdepth 1 -type d)
+    DOTFILES_CONFIG=$(find "$WORKING_DIR/linux/.config" -mindepth 1 -maxdepth 1)
     DOTFILES_ROOT=$(find "$WORKING_DIR/linux" -mindepth 1 -maxdepth 1)
-    CONFIGNORE="./.confignore"
 
     # Remove root config in $HOME
     # Skipping over the .config directory
