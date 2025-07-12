@@ -187,6 +187,7 @@ if [ $OS == "Linux" ]; then
     asdf plugin add kubectl https://github.com/asdf-community/asdf-kubectl.git
     asdf plugin add terraform https://github.com/asdf-community/asdf-hashicorp.git
     asdf plugin add opentofu https://github.com/virtualroot/asdf-opentofu.git
+    asdf plugin add golang https://github.com/asdf-community/asdf-golang.git
 
     # Install asdf tools (uses the .tools-versions found in dotfiles repo)
     asdf install
