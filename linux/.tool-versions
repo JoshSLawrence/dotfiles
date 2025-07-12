@@ -1,4 +1,4 @@
-opentofu 1.9.1
+opentofu 1.10.2
 kubectl 1.33.1
 terraform 1.12.2
 golang 1.24.5
