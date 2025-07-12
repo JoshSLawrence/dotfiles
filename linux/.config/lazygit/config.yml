@@ -1,6 +1,6 @@
 gui:
   nerdFontsVersion: "3"
-  theme:
+  theme: # Tokyonight
     activeBorderColor:
       - "#ff9e64"
       - "bold"

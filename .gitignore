@@ -1,2 +1,3 @@
 *.omp.json.bak
 **/tmux/plugins/*
+**/lazygit/state.yml
