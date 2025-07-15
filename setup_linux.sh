@@ -315,5 +315,5 @@ if [ $OS == "Linux" ]; then
     echo -e "${GREEN}[Complete]${NOCOLOR} configuration syncd.\n"
     echo -e "Don't forget to logout to change shells or source your ~/.zshrc!"
 else
-    echo "${RED}[ERROR]${NOCOLOR} This setup script is for Linux only!"
+    echo -e "${RED}[ERROR]${NOCOLOR} This setup script is for Linux only!"
 fi
