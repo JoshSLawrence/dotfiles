@@ -1,6 +1,3 @@
-set-option -g status-position bottom
-
-
 set -ogq @catppuccin_flavour 'mocha'
 set -ogq @catppuccin_window_status_style "basic"
 
@@ -17,7 +14,7 @@ set -g @catppuccin_window_current_number_color "#fab387"
 set -g @catppuccin_window_text_color "#313244"
 set -g @catppuccin_window_number_color ""
 
-set -g @catppuccin_status_left_separator "█"
+#set -g @catppuccin_status_left_separator "█"
 set -g @catppuccin_status_right_separator "█"
 
 set -g @catppuccin_window_status_style "custom"

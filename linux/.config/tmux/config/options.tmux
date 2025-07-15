@@ -14,3 +14,7 @@ bind '"' split-window -v -c "#{pane_current_path}"
 bind % split-window -h -c "#{pane_current_path}"
 
 set-window-option -g mode-keys vi
+
+set-option -g status-position top
+
+set -sg escape-time 0
