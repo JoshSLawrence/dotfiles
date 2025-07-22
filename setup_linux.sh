@@ -228,10 +228,14 @@ if [ $OS == "Linux" ]; then
     curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
 
     # Install JetBrains Mono Nerd Font
-    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
-    sudo unzip JetBrainsMono.zip -d /usr/local/share/fonts/JetBrainsMono.zip
-    sudo fc-cache -f -v
-    rm JetBrainsMono.zip
+    if [ ! -d "/usr/local/share/fonts/JetBrainsMono" ]; then
+      wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
+      sudo unzip JetBrainsMono.zip -d /usr/local/share/fonts/JetBrainsMono
+      sudo fc-cache -f -v
+      rm JetBrainsMono.zip
+    else
+        echo -e "\n${YELLOW}JetBrains Mono Nerd Font already installed, skipping.${NOCOLOR}\n"
+    fi
 
     # Install latest version of LazyGit
     LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \grep -Po '"tag_name": *"v\K[^"]*')
