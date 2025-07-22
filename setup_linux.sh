@@ -267,8 +267,8 @@ if [ $OS == "Linux" ]; then
     # Npm install should be present after mise install 
     sudo npm install -g cowsay
 
-    # Install neovim v0.11.0
-    wget https://github.com/neovim/neovim/releases/download/v0.11.0/nvim-linux-x86_64.tar.gz
+    # Install neovim v0.11.3
+    wget https://github.com/neovim/neovim/releases/download/v0.11.3/nvim-linux-x86_64.tar.gz
     tar -xzvf nvim-linux-x86_64.tar.gz
     cp nvim-linux-x86_64/. $HOME/.local/. -r
     rm nvim-linux-x86_64.tar.gz
