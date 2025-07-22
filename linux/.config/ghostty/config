@@ -30,3 +30,4 @@ selection-background = 353749
 selection-foreground = cdd6f4
 window-width = 92
 window-height = 35
+theme = catppuccin-mocha
