@@ -1,0 +1,8 @@
+[tools]
+node = "latest"
+opentofu = "latest"
+terraform = "latest"
+kubectl = "1.33.1"
+go = "latest"
+terraform-docs = "latest"
+kubelogin = "latest"

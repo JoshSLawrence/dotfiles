@@ -176,21 +176,11 @@ if [ $OS == "Linux" ]; then
         zsh zsh-syntax-highlighting gcc libice6 libsm6 xclip fd-find make \
         fortune-mod apt-transport-https -y
 
-    # Install asdf version 0.18.0
-    wget -O asdf.tar.gz https://github.com/asdf-vm/asdf/releases/download/v0.18.0/asdf-v0.18.0-linux-amd64.tar.gz
-    tar -xzvf asdf.tar.gz
-    chmod +x asdf
-    mv asdf $HOME/.local/bin
-    rm asdf.tar.gz
+    # Install mise
+    curl https://mise.run | sh
 
-    # Install asdf plugins
-    asdf plugin add kubectl https://github.com/asdf-community/asdf-kubectl.git
-    asdf plugin add terraform https://github.com/asdf-community/asdf-hashicorp.git
-    asdf plugin add opentofu https://github.com/virtualroot/asdf-opentofu.git
-    asdf plugin add golang https://github.com/asdf-community/asdf-golang.git
-
-    # Install asdf tools (uses the .tools-versions found in dotfiles repo)
-    asdf install
+    # Install mise tools (uses $HOME/.config/mise/config.toml by default)
+    mise install --cd "linux/.config/mise/config.toml"
 
     # Install kubecolor
     wget -O /tmp/kubecolor.deb https://kubecolor.github.io/packages/deb/pool/main/k/kubecolor/kubecolor_$(wget -q -O- https://kubecolor.github.io/packages/deb/version)_$(dpkg --print-architecture).deb
@@ -270,17 +260,7 @@ if [ $OS == "Linux" ]; then
     rm packages-microsoft-prod.deb
     sudo apt-get update && sudo apt-get install -y powershell
 
-    # Install node v22.14.0
-    wget https://nodejs.org/dist/v22.14.0/node-v22.14.0-linux-x64.tar.xz
-    tar -xvf node-v22.14.0-linux-x64.tar.xz
-    sudo cp node-v22.14.0-linux-x64/bin /usr -r
-    sudo cp node-v22.14.0-linux-x64/lib /usr -r
-    sudo cp node-v22.14.0-linux-x64/share /usr -r
-    sudo cp node-v22.14.0-linux-x64/include /usr -r
-    rm node-v22.14.0-linux-x64.tar.xz
-    rm -rf node-v22.14.0-linux-x64
-
-    # Npm install now that node is present
+    # Npm install should be present after mise install 
     sudo npm install -g cowsay
 
     # Install neovim v0.11.0
@@ -289,11 +269,6 @@ if [ $OS == "Linux" ]; then
     cp nvim-linux-x86_64/. $HOME/.local/. -r
     rm nvim-linux-x86_64.tar.gz
     rm -rf nvim-linux-x86_64
-
-    # Install go programming language
-    wget https://go.dev/dl/go1.24.2.linux-amd64.tar.gz
-    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.24.2.linux-amd64.tar.gz
-    rm go1.24.2.linux-amd64.tar.gz
 
     # Configure git credential manager (WSL)
     git config --global credential.helper "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager.exe"

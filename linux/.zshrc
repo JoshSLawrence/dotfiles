@@ -5,5 +5,5 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/catppuccin_custom.omp.json)"
 eval "$(zoxide init zsh)"
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source ${ASDF_DATA_DIR:-$HOME/.asdf}/plugins/golang/set-env.zsh
+eval "$(~/.local/bin/mise activate zsh)"
 fortune | cowsay
