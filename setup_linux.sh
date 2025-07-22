@@ -208,6 +208,13 @@ if [ $OS == "Linux" ]; then
     cd -
     rm -rf k9s
 
+    # Install opencode
+    wget https://github.com/sst/opencode/releases/download/v0.3.54/opencode-linux-x64.zip
+    unzip opencode-linux-x64.zip -d .
+    chmod +x opencode
+    mv opencode $HOME/.local/bin
+    rm opencode-linux-x64.zip
+
     # Install helm
     curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
