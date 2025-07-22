@@ -181,6 +181,7 @@ if [ $OS == "Linux" ]; then
 
     # Install mise tools (uses $HOME/.config/mise/config.toml by default)
     mise install --cd "linux/.config/mise/config.toml"
+    mise trust "linux/.config/mise/config.toml"
 
     # Install kubecolor
     wget -O /tmp/kubecolor.deb https://kubecolor.github.io/packages/deb/pool/main/k/kubecolor/kubecolor_$(wget -q -O- https://kubecolor.github.io/packages/deb/version)_$(dpkg --print-architecture).deb
