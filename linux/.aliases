@@ -1,7 +1,7 @@
 alias ll='ls -l'
 alias la='ls -la'
 alias vim='nvim'
-alias tf='terraform'
+alias tf='tofu'
 alias python='python3'
 alias newvenv='python3 -m venv .venv'
 alias activate='source .venv/bin/activate'
@@ -13,6 +13,7 @@ alias kube='kubecolor'
 alias k='kubecolor'
 alias myip='curl -w "\n" "https://ipinfo.io/ip"'
 alias bbox='kubectl run -it --rm busybox --image=busybox --restart=Never -- sh'
+alias oc='opencode'
 
 mkdir -p $HOME/.kube/configs
 alias kc='export KUBECONFIG="$HOME/.kube/configs/$((ls "$HOME/.kube/configs" | fzf) || echo "config")"'
