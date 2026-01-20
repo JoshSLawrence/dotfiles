@@ -4,6 +4,10 @@ cursor-style-blink = false
 window-inherit-font-size = false
 #font-feature = -calt
 font-size = 18
+#adjust-cell-height = 10%
+window-padding-balance = true
+window-padding-x = 0,0
+window-padding-y = 0,0
 palette = 0=#45475a
 palette = 1=#f38ba8
 palette = 2=#a6e3a1
