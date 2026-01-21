@@ -116,7 +116,16 @@ detect_untracked() {
     all_tracked=true
     
     # Read .confignore into an array
-    mapfile -t confignore < $CONFIGNORE
+    # the calling thread already check if we are on one of Linux or Darwin
+    # no need for else case atm
+    if [ $OS == "Linux" ]; then
+      mapfile -t confignore < $CONFIGNORE
+    elif [ $OS == "Darwin" ]; then
+      confignore=()
+      while IFS= read -r line; do
+        confignore+=("$line")
+      done < "$CONFIGNORE"
+    fi
 
     for i in $LOCAL_CONFIG; do
         tracked=false
@@ -246,7 +255,9 @@ elif [ $OS == "Darwin" ]; then
     link_config
 
     # Install remaining tools (must run after link_config)
+    echo -e "${YELLOW}${YELLOW}Installing tools with mise\n"
     mise install
+    echo -e "\n${GREEN}Tool install complete${NOCOLOR}\n"
 
     # Check tracked configs before wrapping up
     detect_untracked "$LOCAL_CONFIG" "$DOTFILES_CONFIG"
