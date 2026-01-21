@@ -214,7 +214,7 @@ if [ $OS == "Linux" ]; then
     # Done!
     echo -e "${GREEN}[Complete]${NOCOLOR} configuration syncd.\n"
     echo -e "Don't forget to logout to change shells or source your ~/.zshrc!"
-else if [ $OS == "Darwin" ]; then
+elif [ $OS == "Darwin" ]; then
     git submodule init
     git submodule update
 
@@ -253,7 +253,6 @@ else if [ $OS == "Darwin" ]; then
 
     # Done!
     echo -e "${GREEN}[Complete]${NOCOLOR} configuration syncd.\n"
-else if ()
 else
     echo -e "${RED}[ERROR]${NOCOLOR} This setup script is for Linux only!"
 fi
