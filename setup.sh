@@ -30,6 +30,7 @@
 # Ensure we start outfrom the root of the dotfiles repo directory
 cd "$(dirname "$0")"
 WORKING_DIR=$(pwd)
+CONFIG_DIR="root"
 
 mkdir -p $HOME/.config
 mkdir -p $HOME/.local/bin
@@ -49,8 +50,8 @@ link_config() {
     echo -e "${YELLOW}\nLinking configuration to the local system${NOCOLOR}\n"
 
     LOCAL_CONFIG=$(find "$HOME/.config" -mindepth 1 -maxdepth 1)
-    DOTFILES_CONFIG=$(find "$WORKING_DIR/linux/.config" -mindepth 1 -maxdepth 1)
-    DOTFILES_ROOT=$(find "$WORKING_DIR/linux" -mindepth 1 -maxdepth 1)
+    DOTFILES_CONFIG=$(find "$WORKING_DIR/$CONFIG_DIR/.config" -mindepth 1 -maxdepth 1)
+    DOTFILES_ROOT=$(find "$WORKING_DIR/$CONFIG_DIR" -mindepth 1 -maxdepth 1)
 
     # Remove root config in $HOME
     # Skipping over the .config directory
@@ -110,7 +111,7 @@ detect_untracked() {
     echo -e "${YELLOW}Checking for untracked configuration in $HOME/.config${NOCOLOR}\n"
 
     LOCAL_CONFIG=$(find "$HOME/.config" -mindepth 1 -maxdepth 1)
-    DOTFILES_CONFIG=$(find "$WORKING_DIR/linux/.config" -mindepth 1 -maxdepth 1)
+    DOTFILES_CONFIG=$(find "$WORKING_DIR/$CONFIG_DIR/.config" -mindepth 1 -maxdepth 1)
     CONFIGNORE="./.confignore"
 
     all_tracked=true
@@ -265,5 +266,5 @@ elif [ $OS == "Darwin" ]; then
     # Done!
     echo -e "${GREEN}[Complete]${NOCOLOR} configuration syncd.\n"
 else
-    echo -e "${RED}[ERROR]${NOCOLOR} This setup script is for Linux only!"
+    echo -e "${RED}[ERROR]${NOCOLOR} This setup script is for Linux and MacOS only!"
 fi
