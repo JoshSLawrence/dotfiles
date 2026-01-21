@@ -7,3 +7,6 @@
 [submodule "linux/.config/nvim"]
 	path = linux/.config/nvim
 	url = https://github.com/JoshSLawrence/nvim
+[submodule "linux/.config/tmux/plugins/tpm"]
+	path = linux/.config/tmux/plugins/tpm
+	url = https://github.com/tmux-plugins/tpm
