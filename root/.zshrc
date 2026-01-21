@@ -1,12 +1,14 @@
 source ~/.exports
 source ~/.aliases
 
+# mise handles oh-my-posh on PATH must be for prompt setup
+eval "$(~/.local/bin/mise activate zsh)"
+
 # Prompt setup
 eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/catppuccin_custom.omp.json)"
 
 # zoxide should always be setup after exports, aliases, prompt
 eval "$(zoxide init zsh)"
-eval "$(~/.local/bin/mise activate zsh)"
 
 # Completion should always be configured after exports, aliases, prompt, and misc evals
 autoload -Uz compinit && compinit
