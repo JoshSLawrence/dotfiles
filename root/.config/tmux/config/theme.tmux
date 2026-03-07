@@ -21,7 +21,7 @@ set -g @catppuccin_window_status_style "custom"
 set -g @catppuccin_window_right_separator ""
 set -g @catppuccin_window_left_separator ""
 
-set -g @catppuccin_date_time_text " %b %d %l:%M %p"
+set -g @catppuccin_date_time_text " %b %d %I:%M %p"
 set -g @catppuccin_status_background "none"
 
 # Enable catppuccin and built-in status moduels (run MUST be first)
