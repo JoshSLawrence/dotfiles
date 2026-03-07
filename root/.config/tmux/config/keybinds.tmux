@@ -6,6 +6,7 @@ bind C-Space send-prefix
 # Shift Alt vim keys to switch windows
 bind -n M-H previous-window
 bind -n M-L next-window
+bind c new-window -c "#{pane_current_path}"
 
 # Open lazygit in a popup window
 bind g display-popup -E -d "#{pane_current_path}" -h 90% -w 90% lazygit
