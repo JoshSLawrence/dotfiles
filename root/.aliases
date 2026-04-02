@@ -17,3 +17,4 @@ alias oc='opencode'
 alias ghostconf='nvim "$XDG_CONFIG_HOME/ghostty/config"'
 mkdir -p $HOME/.kube/configs
 alias kc='export KUBECONFIG="$HOME/.kube/configs/$((ls "$HOME/.kube/configs" | fzf) || echo "config")"'
+alias space="spacectl"
