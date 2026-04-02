@@ -28,3 +28,7 @@ cowsay = "latest"
 arduino-cli = "latest"
 kind = "latest"
 argocd = "latest"
+spacectl = "latest"
+aws = { version = "latest", symlink_bins = "true" }
+btop = "latest"
+lazydocker = "latest"
