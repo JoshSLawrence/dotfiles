@@ -32,3 +32,4 @@ spacectl = "latest"
 aws = { version = "latest", symlink_bins = "true" }
 btop = "latest"
 lazydocker = "latest"
+tree-sitter = "latest"
