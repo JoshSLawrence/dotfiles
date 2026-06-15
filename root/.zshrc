@@ -10,7 +10,10 @@ fi
 eval "$(~/.local/bin/mise activate zsh)"
 
 # Prompt setup
-eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/catppuccin_custom.omp.json)"
+# - Mocha
+eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/catppuccin_mocha_custom.omp.json)"
+# - Latte
+# eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/catppuccin_latte_custom.omp.json)"
 
 # zoxide should always be setup after exports, aliases, prompt
 eval "$(zoxide init zsh)"

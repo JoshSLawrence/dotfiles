@@ -3,11 +3,14 @@ cursor-style = block
 cursor-style-blink = false
 window-inherit-font-size = false
 font-feature = calt
-font-size = 18
-#adjust-cell-height = 10%
+font-size = 21
+# adjust-cell-height = 10%
 window-padding-balance = true
 window-padding-x = 0,0
 window-padding-y = 0,0
+window-width = 92
+window-height = 35
+
 palette = 0=#45475a
 palette = 1=#f38ba8
 palette = 2=#a6e3a1
@@ -24,14 +27,19 @@ palette = 12=#89b4fa
 palette = 13=#f5c2e7
 palette = 14=#94e2d5
 palette = 15=#a6adc8
-# mocha
-background = 1e1e2e
-# tokyonight
-#background = 1A1C25
+
 foreground = cdd6f4
 cursor-color = f5e0dc
 selection-background = 353749
 selection-foreground = cdd6f4
-window-width = 92
-window-height = 35
-theme = Catppuccin Mocha
+
+# mocha
+background = 1e1e2e
+
+# latte
+# background = eff1f5
+
+# tokyonight
+# background = 1A1C25
+
+# theme = catppuccin-mocha.conf

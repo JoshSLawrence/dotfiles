@@ -30,6 +30,9 @@ kind = "latest"
 argocd = "latest"
 spacectl = "latest"
 aws = { version = "latest", symlink_bins = "true" }
-btop = "latest"
+btop =  { version = "latest", os = ["linux", ] }
 lazydocker = "latest"
 tree-sitter = "latest"
+sqlc = "latest"
+yazi = "latest"
+fd = "latest" # required for nvim plugin: snacks (explorer search)
