@@ -12,3 +12,6 @@ export GROFF_NO_SGR=1
 export MANPAGER="nvim +Man!"
 export DOTNET_ROOT=/home/josh/.dotnet
 export XDG_CONFIG_HOME="$HOME/.config"
+export ENVIRONMENT=development
+export EDITOR=nvim
+source ~/.exports_ignored
