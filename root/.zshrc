@@ -18,6 +18,9 @@ eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/catppuccin_mocha_c
 # zoxide should always be setup after exports, aliases, prompt
 eval "$(zoxide init zsh)"
 
+# Use emacs mode for line editing (override tmux vi mode)
+bindkey -e
+
 # Completion should always be configured after exports, aliases, prompt, and misc evals
 autoload -Uz compinit && compinit
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
