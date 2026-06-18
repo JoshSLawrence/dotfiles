@@ -1,11 +1,6 @@
 source ~/.exports
 source ~/.aliases
 
-# Sensitive exports - in .gitignore
-if [ -f "~/.exports_ignored" ]; then
-  source ~/.exports_ignored
-fi
-
 # mise handles oh-my-posh on PATH must be for prompt setup
 eval "$(~/.local/bin/mise activate zsh)"
 
