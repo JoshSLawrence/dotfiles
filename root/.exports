@@ -14,4 +14,7 @@ export DOTNET_ROOT=/home/josh/.dotnet
 export XDG_CONFIG_HOME="$HOME/.config"
 export ENVIRONMENT=development
 export EDITOR=nvim
-source ~/.exports_ignored
+# Sensitive exports - in .gitignore
+if [ -f "~/.exports_ignored" ]; then
+  source ~/.exports_ignored
+fi

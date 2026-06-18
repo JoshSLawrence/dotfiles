@@ -36,3 +36,5 @@ tree-sitter = "latest"
 sqlc = "latest"
 yazi = "latest"
 fd = "latest" # required for nvim plugin: snacks (explorer search)
+fastfetch = "latest"
+usage = "latest"

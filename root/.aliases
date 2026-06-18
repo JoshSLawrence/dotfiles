@@ -20,3 +20,5 @@ alias kc='export KUBECONFIG="$HOME/.kube/configs/$((ls "$HOME/.kube/configs" | f
 alias space="spacectl"
 alias tfdocs="terraform-docs"
 alias pcra="pre-commit run --all"
+alias ff="fastfetch"
+alias cctofu="cookiecutter gh:JoshSLawrence/cookiecutter --directory=templates/opentofu"
