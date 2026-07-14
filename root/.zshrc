@@ -29,3 +29,11 @@ fi
 
 # Something fun
 fortune | cowsay
+
+# pnpm
+export PNPM_HOME="/Users/josh/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+# pnpm end

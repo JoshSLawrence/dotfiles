@@ -1,3 +1,7 @@
+[settings]
+minimum_release_age = "24h"
+minimum_release_age_excludes = ["claude", "opencode"]
+
 [tools]
 node = "latest"
 opentofu = "latest"
@@ -38,3 +42,7 @@ yazi = "latest"
 fd = "latest" # required for nvim plugin: snacks (explorer search)
 fastfetch = "latest"
 usage = "latest"
+bat = "latest"
+kiota = "latest"
+claude = "latest"
+pnpm = "latest"
