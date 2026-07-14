@@ -44,3 +44,8 @@ background = 1e1e2e
 # background = 1A1C25
 
 # theme = catppuccin-mocha.conf
+
+background-image = "/Users/josh/Pictures/Wallpapers/cool-cat.jpg"
+background-image-opacity = .15
+background-image-position = center
+background-image-fit = cover
