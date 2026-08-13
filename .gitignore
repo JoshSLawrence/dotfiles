@@ -1,3 +1,4 @@
 *.omp.json.bak
 **/tmux/plugins/*
 **/lazygit/state.yml
+.DS_Store
