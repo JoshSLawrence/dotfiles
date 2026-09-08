@@ -1,6 +1,7 @@
 [settings]
 minimum_release_age = "24h"
 minimum_release_age_excludes = ["claude", "opencode"]
+auto_update = true
 
 [tools]
 node = "latest"
@@ -50,3 +51,5 @@ shellcheck = "latest"
 azure-kubelogin = "latest"
 dotnet = "latest"
 herdr = "latest"
+conftest = "latest"
+pi = "latest"
