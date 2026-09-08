@@ -1,10 +1,12 @@
+custom-shader = ./shaders/cursor_smear.glsl
+
 mouse-hide-while-typing = true
 shell-integration-features = no-cursor
 cursor-style = block
 cursor-style-blink = false
 window-inherit-font-size = false
 font-feature = calt
-font-size = 20
+font-size = 19
 # adjust-cell-height = 10%
 window-padding-balance = true
 window-padding-x = 0,0
@@ -35,17 +37,19 @@ selection-background = 353749
 selection-foreground = cdd6f4
 
 # mocha
-background = 1e1e2e
+# background = 1e1e2e
 
 # latte
 # background = eff1f5
 
 # tokyonight
 # background = 1A1C25
+# tokyonight 2
+background = 1A1B26
 
 # theme = catppuccin-mocha.conf
 
-background-image = "/Users/josh/Pictures/Wallpapers/cool-cat.jpg"
+# background-image = "/Users/josh/Pictures/Wallpapers/cool-cat.jpg"
 background-image-opacity = .15
 background-image-position = center
 background-image-fit = cover
