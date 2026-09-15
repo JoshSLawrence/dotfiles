@@ -22,3 +22,66 @@ alias tfdocs="terraform-docs"
 alias pcra="pre-commit run --all"
 alias ff="fastfetch"
 alias cctofu="cookiecutter gh:JoshSLawrence/cookiecutter --directory=templates/opentofu"
+
+ocs() {
+	local session_id
+	session_id=$(opencode session list | fzf | awk '{print $1}') || return
+	if [[ -z "$session_id" ]]; then
+    return
+  fi
+	opencode -s "$session_id"
+}
+
+# btop: use Tokyo Night in dark mode and Catppuccin Latte in light mode without
+# mutating the tracked btop.conf.
+btop() {
+  local dir="${XDG_STATE_HOME:-$HOME/.local/state}/theme/btop"
+  local theme="tokyo-night.theme"
+  [[ "$("$HOME/.config/theme/theme-detect.sh" 2>/dev/null)" == "light" ]] \
+    && theme="catppuccin_latte.theme"
+  mkdir -p "$dir"
+  sed "s|^color_theme = .*|color_theme = \"$theme\"|" \
+    "$HOME/.config/btop/btop.conf" > "$dir/btop.conf"
+  command btop --config "$dir/btop.conf" \
+    --themes-dir "$HOME/.config/btop/themes" "$@"
+}
+
+# k9s: launch with the catppuccin skin matching the system appearance. k9s reads
+# its skin once at startup and can't be flipped live, so pick it here via a
+# runtime config dir (keeps the tracked config.yaml clean).
+k9s() {
+  local dir="${XDG_STATE_HOME:-$HOME/.local/state}/theme/k9s"
+  local skin="catppuccin-mocha-transparent"
+  [[ "$("$HOME/.config/theme/theme-detect.sh" 2>/dev/null)" == "light" ]] \
+    && skin="catppuccin-latte-transparent"
+  mkdir -p "$dir"
+  ln -sfn "$HOME/.config/k9s/skins" "$dir/skins"
+  sed "s|^\( *skin:\).*|\1 $skin|" "$HOME/.config/k9s/config.yaml" > "$dir/config.yaml"
+  K9S_CONFIG_DIR="$dir" command k9s "$@"
+}
+
+# theme: inspect or pin the light/dark appearance for shell-driven tools (prompt,
+# lazygit, btop, k9s). Ghostty, Neovim, and herdr follow the OS directly and
+# ignore this override.
+#   theme            show detected mode + any override
+#   theme light|dark pin a mode; open a new shell for it to take effect
+#   theme auto       clear the override and follow the OS again
+theme() {
+  local state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/theme"
+  case "${1:-status}" in
+    light|dark)
+      mkdir -p "$state_dir"; printf '%s\n' "$1" > "$state_dir/override"
+      echo "Pinned to $1. Open a new shell for prompt/lazygit/etc to update." ;;
+    auto)
+      rm -f "$state_dir/override"
+      echo "Following the system appearance again (open a new shell)." ;;
+    status)
+      echo "detected: $("$HOME/.config/theme/theme-detect.sh")"
+      if [[ -f "$state_dir/override" ]]; then
+        echo "override: $(cat "$state_dir/override")"
+      else
+        echo "override: none"
+      fi ;;
+    *) echo "usage: theme [light|dark|auto|status]" >&2; return 2 ;;
+  esac
+}

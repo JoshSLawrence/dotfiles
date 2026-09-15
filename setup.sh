@@ -65,6 +65,14 @@ link_config() {
 
     # Remove config in $HOME/.config
     for config in $DOTFILES_CONFIG; do
+	    # Herdr keeps live sockets, logs, and session state in ~/.config/herdr.
+	    # Preserve that directory and link only the tracked config file.
+	    if [ "$(basename $config)" = "herdr" ]; then
+	        mkdir -p "$HOME/.config/herdr"
+	        rm -f "$HOME/.config/herdr/config.toml"
+	        echo -e "${RED}[REMOVED]${NOCOLOR} $HOME/.config/herdr/config.toml"
+	        continue
+	    fi
 	    rm -rf "$HOME/.config/$(basename $config)"
         echo -e "${RED}[REMOVED]${NOCOLOR} $HOME/.config/$(basename $config)"
     done
@@ -90,6 +98,19 @@ link_config() {
 
     # Sym link config for $HOME/.config
     for config in $DOTFILES_CONFIG; do
+	    # See removal loop above: preserve herdr runtime state and link only the
+	    # tracked config file.
+	    if [ "$(basename $config)" = "herdr" ]; then
+	        mkdir -p "$HOME/.config/herdr"
+	        ln -s "$config/config.toml" "$HOME/.config/herdr/config.toml"
+
+	        if [ $? = 0 ]; then
+	             echo -e "${GREEN}[LINKED]${NOCOLOR} $HOME/.config/herdr/config.toml -> $config/config.toml"
+	        else
+	             echo -e "${RED}[LINK FAILED]${NOCOLOR} $HOME/.config/herdr/config.toml -> $config/config.toml"
+	        fi
+	        continue
+	    fi
         ln -s $config "$HOME/.config/$(basename $config)"
 
         if [ $? = 0 ]; then

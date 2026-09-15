@@ -2,28 +2,6 @@ os:
   editPreset: "nvim-remote"
 gui:
   nerdFontsVersion: "3"
-  theme: # Tokyonight
-    activeBorderColor:
-      - "#ff9e64"
-      - "bold"
-    inactiveBorderColor:
-      - "#27a1b9"
-    searchingActiveBorderColor:
-      - "#ff9e64"
-      - "bold"
-    optionsTextColor:
-      - "#7aa2f7"
-    selectedLineBgColor:
-      - "#283457"
-    cherryPickedCommitFgColor:
-      - "#7aa2f7"
-    cherryPickedCommitBgColor:
-      - "#bb9af7"
-    markedBaseCommitFgColor:
-      - "#7aa2f7"
-    markedBaseCommitBgColor:
-      - "#e0af68"
-    unstagedChangesColor:
-      - "#db4b4b"
-    defaultFgColor:
-      - "#c0caf5"
+# The theme is layered on top via LG_CONFIG_FILE (set in .zshrc) so it can
+# follow the system appearance: theme-tokyonight.yml (dark) / theme-latte.yml
+# (light). See root/.config/lazygit/ for those overlays.

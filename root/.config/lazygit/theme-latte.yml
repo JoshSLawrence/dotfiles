@@ -1,0 +1,29 @@
+# Catppuccin Latte (light) lazygit theme overlay.
+# Layered on top of config.yml via LG_CONFIG_FILE when the system is in light
+# mode. Keep in sync with theme-tokyonight.yml.
+gui:
+  theme:
+    activeBorderColor:
+      - "#1e66f5"
+      - "bold"
+    inactiveBorderColor:
+      - "#6c6f85"
+    searchingActiveBorderColor:
+      - "#1e66f5"
+      - "bold"
+    optionsTextColor:
+      - "#1e66f5"
+    selectedLineBgColor:
+      - "#ccd0da"
+    cherryPickedCommitFgColor:
+      - "#1e66f5"
+    cherryPickedCommitBgColor:
+      - "#ccd0da"
+    markedBaseCommitFgColor:
+      - "#1e66f5"
+    markedBaseCommitBgColor:
+      - "#df8e1d"
+    unstagedChangesColor:
+      - "#d20f39"
+    defaultFgColor:
+      - "#4c4f69"
