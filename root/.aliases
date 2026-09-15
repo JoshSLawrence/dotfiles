@@ -25,7 +25,7 @@ alias cctofu="cookiecutter gh:JoshSLawrence/cookiecutter --directory=templates/o
 
 ocs() {
 	local session_id
-	session_id=$(opencode session list | fzf | awk '{print $1}') || return
+	session_id=$(opencode session list | fzf --header-lines=2 | awk '{print $1}') || return
 	if [[ -z "$session_id" ]]; then
     return
   fi
