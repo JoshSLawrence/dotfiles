@@ -23,6 +23,15 @@ alias pcra="pre-commit run --all"
 alias ff="fastfetch"
 alias cctofu="cookiecutter gh:JoshSLawrence/cookiecutter --directory=templates/opentofu"
 
+ocs() {
+	local session_id
+	session_id=$(opencode session list | fzf | awk '{print $1}') || return
+	if [[ -z "$session_id" ]]; then
+    return
+  fi
+	opencode -s "$session_id"
+}
+
 # btop: use Tokyo Night in dark mode and Catppuccin Latte in light mode without
 # mutating the tracked btop.conf.
 btop() {
