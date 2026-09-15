@@ -48,13 +48,14 @@ How each tool reacts:
 | herdr      | tokyo-night       | catppuccin-latte  | live (native)    |
 | oh-my-posh | tokyonight-night  | Catppuccin Latte  | next shell       |
 | lazygit    | Tokyonight        | Catppuccin Latte  | next launch      |
+| btop       | Tokyo Night       | Catppuccin Latte  | next launch      |
 | k9s        | Catppuccin Mocha  | Catppuccin Latte  | next launch      |
 
 <!-- markdownlint-disable-next-line MD013 -->
 
 Use the `theme` command to override the shell-driven tools (prompt, lazygit,
-k9s): `theme light`, `theme dark`, `theme auto` (follow the OS again), or
-`theme status`. Ghostty, Neovim, and herdr always follow the OS directly.
+btop, k9s): `theme light`, `theme dark`, `theme auto` (follow the OS again),
+or `theme status`. Ghostty, Neovim, and herdr always follow the OS directly.
 
 Herdr is special-cased in `setup.sh`: only `~/.config/herdr/config.toml` is
 symlinked. The rest of `~/.config/herdr` stays local so live sessions, sockets,
