@@ -16,12 +16,24 @@ alias bbox='kubectl run -it --rm busybox --image=busybox --restart=Never -- sh'
 alias oc='opencode'
 alias ghostconf='nvim "$XDG_CONFIG_HOME/ghostty/config"'
 mkdir -p $HOME/.kube/configs
-alias kc='export KUBECONFIG="$HOME/.kube/configs/$((ls "$HOME/.kube/configs" | fzf) || echo "config")"'
 alias space="spacectl"
 alias tfdocs="terraform-docs"
 alias pcra="pre-commit run --all"
 alias ff="fastfetch"
 alias cctofu="cookiecutter gh:JoshSLawrence/cookiecutter --directory=templates/opentofu"
+
+# kc: pick a kubeconfig from ~/.kube/configs. "None" points KUBECONFIG at
+# /dev/null so no context is loaded (unsetting it would fall back to
+# ~/.kube/config). Cancelling keeps the current config, or None if unset.
+kc() {
+  local config
+  config=$( (echo None; ls "$HOME/.kube/configs") | fzf)
+  if [[ "$config" == "None" || ( -z "$config" && -z "$KUBECONFIG" ) ]]; then
+    export KUBECONFIG=/dev/null
+  elif [[ -n "$config" ]]; then
+    export KUBECONFIG="$HOME/.kube/configs/$config"
+  fi
+}
 
 ocs() {
 	local session_id
