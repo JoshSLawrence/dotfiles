@@ -3,6 +3,7 @@
   "palette": {
     "red": "#f7768e",
     "blue": "#7aa2f7",
+    "green": "#9ece6a",
     "cyan": "#7dcfff",
     "purple": "#9d7cd8",
     "pink": "#ffa5d8",
@@ -11,6 +12,37 @@
     "orange": "#ff9e64"
   },
   "blocks": [
+    {
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "type": "kubectl",
+          "style": "plain",
+          "foreground": "p:blue",
+          "template": "- ⎈ "
+        },
+        {
+          "type": "kubectl",
+          "style": "plain",
+          "foreground": "p:blue",
+          "template": "{{.Context}} "
+        },
+        {
+          "type": "kubectl",
+          "style": "plain",
+          "foreground": "p:white",
+          "template": "{{if .Namespace}}in{{end}} "
+        },
+        {
+          "type": "kubectl",
+          "style": "plain",
+          "foreground": "p:green",
+          "template": "{{if .Namespace}}({{.Namespace}}){{end}} "
+        }
+      ],
+      "type": "prompt"
+    },
     {
       "alignment": "left",
       "newline": true,
