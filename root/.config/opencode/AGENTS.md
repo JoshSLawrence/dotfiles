@@ -73,6 +73,11 @@ When adding functionality, look for existing files or functions to extend
 before creating new ones. Reduces fragmentation and keeps related logic
 together.
 
+### AGENTS.md Only
+
+Agent instructions go in `AGENTS.md`. Don't create `CLAUDE.md` (or similar)
+symlinks or copies — the tools in use read `AGENTS.md` directly.
+
 ## Shell Scripts
 
 - Use `#!/usr/bin/env bash` shebang
