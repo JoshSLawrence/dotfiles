@@ -33,6 +33,8 @@ bindkey -e
 
 # Completion should always be configured after exports, aliases, prompt, and misc evals
 autoload -Uz compinit && compinit
+source <(kubectl completion zsh)
+compdef kubecolor=kubectl
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
 # zsh-syntax-highlighting should always be sourced last
