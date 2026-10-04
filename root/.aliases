@@ -11,6 +11,7 @@ alias gat='pwsh ~/source/github/snippets/GetEntraAccessToken.ps1'
 alias kubectl='kubecolor'
 alias kube='kubecolor'
 alias k='kubecolor'
+alias m="minikube"
 alias myip='curl -w "\n" "https://ipinfo.io/ip"'
 alias bbox='kubectl run -it --rm busybox --image=busybox --restart=Never -- sh'
 alias oc='opencode'
@@ -21,6 +22,7 @@ alias tfdocs="terraform-docs"
 alias pcra="pre-commit run --all"
 alias ff="fastfetch"
 alias cctofu="cookiecutter gh:JoshSLawrence/cookiecutter --directory=templates/opentofu"
+alias c="claude"
 
 # kc: pick a kubeconfig from ~/.kube/configs. "None" points KUBECONFIG at
 # /dev/null so no context is loaded (unsetting it would fall back to
