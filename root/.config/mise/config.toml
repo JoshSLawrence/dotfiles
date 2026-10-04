@@ -4,7 +4,7 @@ minimum_release_age_excludes = ["claude", "opencode"]
 auto_update = true
 
 [tools]
-node = "latest"
+node = "26.4.0"
 opentofu = "latest"
 terraform = "latest"
 kubectl = "1.33.1"
@@ -53,3 +53,6 @@ dotnet = "latest"
 herdr = "latest"
 conftest = "latest"
 pi = "latest"
+crictl = "latest"
+minikube = "latest"
+python = "3.14.7"
