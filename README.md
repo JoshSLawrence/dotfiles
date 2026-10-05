@@ -60,3 +60,11 @@ or `theme status`. Ghostty, Neovim, and herdr always follow the OS directly.
 Herdr is special-cased in `setup.sh`: only `~/.config/herdr/config.toml` is
 symlinked. The rest of `~/.config/herdr` stays local so live sessions, sockets,
 logs, and session state are preserved.
+
+## Agent instructions
+
+`root/.claude/CLAUDE.md` holds global agent instructions. `setup.sh` symlinks
+only that file to `~/.claude/CLAUDE.md`; the rest of `~/.claude` (sessions,
+history, credentials, caches) stays local and untracked. OpenCode's
+`~/.config/opencode/AGENTS.md` is a relative symlink to the same file, so both
+tools share one copy.
