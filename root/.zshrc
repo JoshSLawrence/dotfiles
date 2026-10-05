@@ -25,6 +25,11 @@ else
   export LG_CONFIG_FILE="$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/theme-tokyonight.yml"
 fi
 
+# kubecolor: its default preset assumes a dark background (white body text).
+if [[ "$THEME_MODE" == "light" ]]; then
+  export KUBECOLOR_PRESET=light
+fi
+
 # zoxide should always be setup after exports, aliases, prompt
 eval "$(zoxide init zsh)"
 
