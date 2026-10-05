@@ -59,6 +59,14 @@ link_config() {
         if [ $(basename $config) = ".config" ]; then
             continue
         fi
+	    # ~/.claude holds Claude Code's sessions, history, credentials, and
+	    # caches. Preserve that directory and link only the tracked CLAUDE.md.
+	    if [ "$(basename "$config")" = ".claude" ]; then
+	        mkdir -p "$HOME/.claude"
+	        rm -f "$HOME/.claude/CLAUDE.md"
+	        echo -e "${RED}[REMOVED]${NOCOLOR} $HOME/.claude/CLAUDE.md"
+	        continue
+	    fi
 	    rm -rf "$HOME/$(basename $config)"
         echo -e "${RED}[REMOVED]${NOCOLOR} $HOME/$(basename $config)"
     done
@@ -86,6 +94,19 @@ link_config() {
         if [ $(basename $config) = ".config" ]; then
             continue
         fi
+
+	    # See removal loop above: preserve Claude Code state and link only the
+	    # tracked CLAUDE.md.
+	    if [ "$(basename "$config")" = ".claude" ]; then
+	        ln -s "$config/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
+
+	        if [ $? = 0 ]; then
+	             echo -e "${GREEN}[LINKED]${NOCOLOR} $HOME/.claude/CLAUDE.md -> $config/CLAUDE.md"
+	        else
+	             echo -e "${RED}[LINK FAILED]${NOCOLOR} $HOME/.claude/CLAUDE.md -> $config/CLAUDE.md"
+	        fi
+	        continue
+	    fi
 
         ln -s $config "$HOME/$(basename $config)"
 
