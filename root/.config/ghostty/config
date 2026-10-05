@@ -1,5 +1,6 @@
 custom-shader = ./shaders/cursor_smear.glsl
 
+font-family = "JetBrainsMono NF Regular"
 mouse-hide-while-typing = true
 shell-integration-features = no-cursor
 cursor-style = block
