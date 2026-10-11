@@ -14,6 +14,11 @@ the knowledge. Guidelines:
 - **Ask the user** when adding to this file
 - Keep entries concise and actionable
 
+## Worktrees
+
+Also use a new git worktree for units of work that are logically separate,
+you must not collide with other work in progress by other humans or agents.
+
 ## Formatting & Style
 
 ### Directory Trees
