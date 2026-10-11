@@ -52,6 +52,12 @@
       "alignment": "left",
       "segments": [
         {
+          "type": "session",
+          "style": "plain",
+          "foreground": "p:flamingo",
+          "template": "{{ .HostName }} "
+        },
+        {
           "properties": {
             "cache_duration": "none",
             "folder_icon": "..\ue5fe..",
