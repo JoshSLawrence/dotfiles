@@ -48,6 +48,12 @@
       "newline": true,
       "segments": [
         {
+          "type": "session",
+          "style": "plain",
+          "foreground": "p:purple",
+          "template": "{{ .HostName }} "
+        },
+        {
           "foreground": "p:white",
           "properties": {
             "folder_icon": "..\ue5fe..",
