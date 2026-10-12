@@ -1,5 +1,12 @@
 # Welcome
 
+[![CI][ci-badge]][ci-workflow]
+
+[ci-workflow]:
+  https://github.com/JoshSLawrence/dotfiles/actions/workflows/ci.yml
+[ci-badge]:
+  https://github.com/JoshSLawrence/dotfiles/actions/workflows/ci.yml/badge.svg
+
 Welcome to my dotfiles repo!
 
 This repo is a massive WIP
@@ -17,6 +24,11 @@ chezmoi's names: `home/dot_zshrc` becomes `~/.zshrc` and
 ```text
 .
 ├── .chezmoiroot
+├── .github                     CI workflow
+├── .gitignore
+├── .markdownlint-cli2.jsonc
+├── .mise                       npm lock for markdownlint
+├── .shellcheckrc
 ├── home
 │   ├── .chezmoi.toml.tmpl      questions asked once per machine
 │   ├── .chezmoiexternal.toml   nvim
@@ -28,6 +40,9 @@ chezmoi's names: `home/dot_zshrc` becomes `~/.zshrc` and
 │   ├── dot_config
 │   ├── dot_exports
 │   └── dot_zshrc
+├── mise-tasks                  lint and test tasks
+├── mise.lock
+├── mise.toml                   dev tools and tasks
 └── README.md
 ```
 
@@ -170,6 +185,30 @@ or `theme status`. Ghostty, Neovim, and herdr always follow the OS directly.
 Herdr: only `~/.config/herdr/config.toml` is tracked. The rest of
 `~/.config/herdr` (sessions, sockets, logs) is a normal local directory,
 listed in `home/.chezmoiignore`.
+
+## Development
+
+The dev tools and checks live in `mise.toml` at the repo root, outside `home/`
+so chezmoi never manages them. CI runs the same tasks.
+
+```bash
+mise trust
+mise run lint
+mise run test
+```
+
+`lint` checks the shell files, renders the install scripts for five machine
+types, lints markdown and lints the workflow. `test` applies the dotfiles into
+a throwaway home directory and checks the result; it clones nvim, so it needs
+network access. Neither touches your real `$HOME`.
+
+Commits must use your personal or GitHub noreply email. CI fails a pull
+request otherwise (`mise run check:commit-email <base> <head>` runs the same
+check locally). To fix a branch, set `user.email` for this repo and run:
+
+```bash
+git rebase --exec 'git commit --amend --no-edit --reset-author' origin/main
+```
 
 ## Agent instructions
 
