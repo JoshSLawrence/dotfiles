@@ -19,7 +19,7 @@ window-height = 35
 # Ghostty watches the OS setting and swaps palette/background/foreground live.
 theme = light:catppuccin-latte.conf,dark:TokyoNight Night
 
-# background-image = "/Users/josh/Pictures/Wallpapers/cool-cat.jpg"
+# background-image = "~/Pictures/Wallpapers/cool-cat.jpg"
 background-image-opacity = .15
 background-image-position = center
 background-image-fit = cover
