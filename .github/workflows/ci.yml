@@ -24,10 +24,8 @@ jobs:
         with:
           persist-credentials: false
       # dot_zshrc is syntax-checked with zsh, which the runner lacks.
-      - run: sudo apt-get update && sudo apt-get install -y zsh
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends zsh
       - uses: jdx/mise-action@2d8d4cafcbd33be2ea37d2b6f5ad595363d1f1ca # v5.1.1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
       - run: mise run lint
 
   apply:
@@ -45,8 +43,6 @@ jobs:
         with:
           persist-credentials: false
       - uses: jdx/mise-action@2d8d4cafcbd33be2ea37d2b6f5ad595363d1f1ca # v5.1.1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
       - run: mise run test
 
   commit-email:
@@ -60,10 +56,12 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - uses: jdx/mise-action@2d8d4cafcbd33be2ea37d2b6f5ad595363d1f1ca # v5.1.1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Check author emails
         env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-        run: mise run check:commit-email "$BASE_SHA" "$HEAD_SHA"
+        # Range from the base branch tip, not base.sha: base.sha can predate
+        # the main the PR was rebased onto, which would pull main's own
+        # commits into the range. A merge-ref range (HEAD^1..HEAD^2) would
+        # also work but fails to build when the PR has conflicts.
+        run: mise run check:commit-email "origin/$BASE_REF" "$HEAD_SHA"
