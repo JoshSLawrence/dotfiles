@@ -6,9 +6,9 @@ eval "$(~/.local/bin/mise activate zsh)"
 
 # mise gets its GitHub token from `gh` (credential_command in the mise config),
 # so without a gh login its GitHub API calls are unauthenticated and can be
-# rate limited. Warn once per shell. This reads gh's hosts file instead of
-# running `gh auth token`, which costs a subprocess on every shell start; the
-# token itself is never read, printed or exported.
+# rate limited. Warn once per shell. This reads gh's hosts file (a cheap
+# grep) instead of running `gh auth token`, which is slower on every shell
+# start; the token itself is never read, printed or exported.
 if ! command -v gh >/dev/null 2>&1 \
   || ! grep -qs '^github\.com:' "${XDG_CONFIG_HOME:-$HOME/.config}/gh/hosts.yml"; then
   echo "warning: gh is missing or not logged in, so mise's GitHub requests are unauthenticated and may be rate limited: run 'gh auth login'" >&2

@@ -68,10 +68,10 @@ packages=(
 )
 
 log_info "Updating apt package lists (sudo may prompt for your password)"
-sudo DEBIAN_FRONTEND=noninteractive apt-get update
+sudo env DEBIAN_FRONTEND=noninteractive apt-get update
 
 log_info "Installing apt packages: ${packages[*]}"
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -y "${packages[@]}"
+sudo env DEBIAN_FRONTEND=noninteractive apt-get install -y "${packages[@]}"
 {{- else }}
 
 log_error "Unsupported platform '{{ .platform }}': this repo supports macOS, Linux (Ubuntu) and WSL"
