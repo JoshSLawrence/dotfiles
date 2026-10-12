@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+#MISE description="Syntax-check and shellcheck the shell dotfiles and mise tasks"
+set -euo pipefail
+
+# shellcheck source=mise-tasks/.lib/common.sh
+source "${MISE_PROJECT_ROOT:?run via 'mise run <task>'}/mise-tasks/.lib/common.sh"
+install_traps
+
+cd "$(project_root)"
+require_cmd shellcheck "Run 'mise install' to get the pinned version."
+
+# dot_exports and dot_aliases have no shebang, so shellcheck needs the dialect.
+sourced=(home/dot_exports home/dot_aliases)
+scripts=(home/dot_config/theme/theme-detect.sh)
+
+# Tasks and libs are found by shebang because mise tasks have no extension.
+tasks=()
+while IFS= read -r f; do
+  if head -n1 "$f" | grep -Eq '^#!.*\bbash\b'; then
+    tasks+=("$f")
+  fi
+done < <(find mise-tasks -type f)
+
+log_step "bash -n"
+for f in "${sourced[@]}" "${scripts[@]}" "${tasks[@]}"; do
+  log_debug "bash -n $f"
+  bash -n "$f"
+done
+log_ok "syntax ok"
+
+log_step "shellcheck (${#sourced[@]} + ${#scripts[@]} + ${#tasks[@]} files)"
+# Warning and above only: dot_exports sources an optional, untracked file; the
+# resulting info-level SC1091 (file not found) cannot be satisfied in CI.
+shellcheck -x -s bash --severity=warning "${sourced[@]}" "${scripts[@]}" "${tasks[@]}"
+log_ok "shellcheck clean"
+
+log_step "zsh -n home/dot_zshrc"
+if command -v zsh >/dev/null 2>&1; then
+  zsh -n home/dot_zshrc
+  log_ok "zsh syntax ok"
+else
+  log_warn "zsh not installed; skipping. Install zsh (apt install zsh) to check dot_zshrc."
+fi

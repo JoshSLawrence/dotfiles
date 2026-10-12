@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#MISE description="Lint markdown (80 columns) with markdownlint-cli2"
+set -euo pipefail
+
+# shellcheck source=mise-tasks/.lib/common.sh
+source "${MISE_PROJECT_ROOT:?run via 'mise run <task>'}/mise-tasks/.lib/common.sh"
+install_traps
+
+cd "$(project_root)"
+require_cmd markdownlint-cli2 "Run 'mise install' to get the pinned version."
+
+log_step "markdownlint-cli2"
+run markdownlint-cli2
+log_ok "markdown clean"
