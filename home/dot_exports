@@ -1,0 +1,19 @@
+export PATH=$PATH:$HOME/.local/bin
+export GCM_CREDENTIAL_STORE=cache
+export PATH=$PATH:$HOME/.dotnet/tools
+export PATH=$PATH:/usr/local/go/bin
+GPG_TTY=$(tty)
+export GPG_TTY
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+export PATH=$PATH:$HOME/.local/share/nvim/mason/bin
+export APP_ENV=development
+export GROFF_NO_SGR=1
+export MANPAGER="nvim +Man!"
+export XDG_CONFIG_HOME="$HOME/.config"
+export ENVIRONMENT=development
+export EDITOR=nvim
+# Sensitive exports - in .gitignore
+if [ -f "$HOME/.exports_ignored" ]; then
+  source "$HOME/.exports_ignored"
+fi

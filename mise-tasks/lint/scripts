@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+#MISE description="Render the chezmoi run scripts for five machine types, lint them and assert the run plan"
+set -euo pipefail
+
+# shellcheck source=mise-tasks/.lib/common.sh
+source "${MISE_PROJECT_ROOT:?run via 'mise run <task>'}/mise-tasks/.lib/common.sh"
+# shellcheck source=mise-tasks/.lib/chezmoi.sh
+source "${MISE_PROJECT_ROOT}/mise-tasks/.lib/chezmoi.sh"
+install_traps
+
+cd "$(project_root)"
+require_cmd chezmoi "Run 'mise install' to get the pinned version."
+require_cmd shellcheck "Run 'mise install' to get the pinned version."
+
+work="" # declared for shellcheck: make_tmpdir assigns it by name
+make_tmpdir work
+cz_init "$work"
+
+# name|expected scripts|data. The data sets cover every branch of the
+# templates; the last one has an apostrophe in the git name to prove the
+# shellQuote escaping survives shellcheck.
+datasets=(
+  'darwin|10 20 40|{"platform":"darwin","hasGUI":true,"gitName":"Jane Doe","gitEmail":"jane@example.com","wslGitCredentialManager":false,"azureDevOpsUseHttpPath":false}'
+  'linux-gui|10 20 30|{"platform":"linux","hasGUI":true,"gitName":"","gitEmail":"","wslGitCredentialManager":false,"azureDevOpsUseHttpPath":false}'
+  'linux-headless|10 20 30|{"platform":"linux","hasGUI":false,"gitName":"","gitEmail":"","wslGitCredentialManager":false,"azureDevOpsUseHttpPath":false}'
+  'wsl|10 20 30|{"platform":"wsl","hasGUI":false,"gitName":"","gitEmail":"","wslGitCredentialManager":false,"azureDevOpsUseHttpPath":false}'
+  'wsl-optin|10 20 30 40|{"platform":"wsl","hasGUI":false,"gitName":"Jane O'"'"'Doe","gitEmail":"jane@example.com","wslGitCredentialManager":true,"azureDevOpsUseHttpPath":true}'
+)
+
+failures=0
+fail() {
+  log_error "$1"
+  failures=$((failures + 1))
+}
+
+for entry in "${datasets[@]}"; do
+  IFS='|' read -r name expected data <<<"$entry"
+  log_step "Render: $name"
+  out="$work/render/$name"
+  mkdir -p "$out"
+
+  planned=""
+  # Sorted by script number: chezmoi orders run_once before run_onchange, but
+  # the plan reads better in numeric order.
+  while IFS= read -r tmpl; do
+    base="$(basename "$tmpl" .tmpl)"
+    if ! cz execute-template --override-data "$data" <"$tmpl" >"$out/$base"; then
+      fail "$name: $base failed to render. Fix the template syntax, then re-run."
+      continue
+    fi
+    # A template that guards itself out renders to whitespace only.
+    if [[ -z "$(tr -d '[:space:]' <"$out/$base")" ]]; then
+      rm "$out/$base"
+      continue
+    fi
+    num="${base#run_*_after_}"
+    planned="${planned:+$planned }${num%%-*}"
+  done < <(find home/.chezmoiscripts -name '*.tmpl' | sort -t_ -k4)
+
+  if [[ "$planned" != "$expected" ]]; then
+    fail "$name: rendered scripts '$planned', expected '$expected'. If the run plan changed on purpose, update datasets in mise-tasks/lint/scripts."
+  else
+    log_ok "$name: run plan is $planned"
+  fi
+
+  for f in "$out"/*; do
+    [[ -e "$f" ]] || continue
+    bash -n "$f" || fail "$name: $(basename "$f") has a syntax error."
+    shellcheck -s bash "$f" || fail "$name: shellcheck failed on $(basename "$f")."
+  done
+
+  ignore="$(cz execute-template --override-data "$data" <home/.chezmoiignore)"
+  has_gui="${data#*\"hasGUI\":}"
+  has_gui="${has_gui%%,*}"
+  if grep -qx '\.config/ghostty' <<<"$ignore"; then ignored=true; else ignored=false; fi
+  if [[ "$has_gui" == "true" && "$ignored" == "true" ]] ||
+    [[ "$has_gui" == "false" && "$ignored" == "false" ]]; then
+    fail "$name: .config/ghostty ignored=$ignored but hasGUI=$has_gui. Ghostty must be ignored exactly when there is no GUI."
+  else
+    log_ok "$name: ghostty ignored=$ignored (hasGUI=$has_gui)"
+  fi
+done
+
+[[ $failures -eq 0 ]] || die "$failures check(s) failed; see the errors above."
+log_ok "All rendered scripts are clean"

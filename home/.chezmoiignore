@@ -1,0 +1,34 @@
+# Paths in $HOME that chezmoi must leave alone. Listing a path here also
+# hides it from `chezmoi unmanaged`, so this doubles as the "not tracked on
+# purpose" list.
+
+**/.DS_Store
+
+# Runtime state: only the one tracked file in each directory is managed.
+.claude/*
+!.claude/CLAUDE.md
+.config/herdr/*
+!.config/herdr/config.toml
+
+# OpenCode installs its plugin dependencies here.
+.config/opencode/bun.lock
+.config/opencode/node_modules
+.config/opencode/package-lock.json
+.config/opencode/package.json
+
+.config/lazygit/state.yml
+.config/oh-my-posh/*.omp.json.bak
+
+# Other tools' config that is deliberately not tracked. chezmoi keeps its own
+# machine-specific config and state in .config/chezmoi.
+.config/chezmoi
+.config/configstore
+.config/github-copilot
+.config/go
+.config/NuGet
+.config/wslu
+
+{{ if not .hasGUI -}}
+# Ghostty needs a desktop. On WSL the terminal runs on the Windows side.
+.config/ghostty
+{{- end }}

@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+#MISE description="Apply the dotfiles into a throwaway HOME and verify the symlinks, status and idempotence"
+set -euo pipefail
+
+# shellcheck source=mise-tasks/.lib/common.sh
+source "${MISE_PROJECT_ROOT:?run via 'mise run <task>'}/mise-tasks/.lib/common.sh"
+# shellcheck source=mise-tasks/.lib/chezmoi.sh
+source "${MISE_PROJECT_ROOT}/mise-tasks/.lib/chezmoi.sh"
+install_traps
+
+cd "$(project_root)"
+require_cmd chezmoi "Run 'mise install' to get the pinned version."
+require_cmd git "Install git; chezmoi needs it to clone the nvim external."
+
+work="" # declared for shellcheck: make_tmpdir assigns it by name
+make_tmpdir work
+cz_init "$work"
+root="$(project_root)"
+
+# Scripts are excluded because they install packages and would touch the
+# machine; the lint:scripts task covers them. Externals stay in: the nvim
+# clone needs network access, which proves the .chezmoiexternal.toml entry.
+apply_args=(apply --exclude=scripts)
+
+log_step "chezmoi init (prompt defaults, scratch config)"
+cz init --promptDefaults
+
+log_step "chezmoi apply into $CZ_DEST"
+cz "${apply_args[@]}"
+
+log_step "Every managed file is a symlink into home/"
+bad=0
+# The nvim clone is a real git checkout by design, so it is the only place
+# regular files may exist.
+while IFS= read -r f; do
+  log_error "Regular file, expected a symlink into home/: ${f#"$CZ_DEST"/}"
+  bad=$((bad + 1))
+done < <(find "$CZ_DEST" -path "$CZ_DEST/.config/nvim" -prune -o -type f -print)
+managed=0
+while IFS= read -r rel; do
+  p="$CZ_DEST/$rel"
+  case "$rel" in .config/nvim | .config/nvim/*) continue ;; esac
+  [[ -d "$p" && ! -L "$p" ]] && continue
+  managed=$((managed + 1))
+  if [[ ! -L "$p" ]]; then
+    log_error "Not a symlink: $rel"
+    bad=$((bad + 1))
+    continue
+  fi
+  target="$(readlink "$p")"
+  case "$target" in
+    "$root"/home/*) ;;
+    ../*) ;; # relative links such as opencode/AGENTS.md come from symlink_ files
+    *)
+      log_error "$rel points outside home/: $target"
+      bad=$((bad + 1))
+      ;;
+  esac
+done < <(cz managed --include=files,symlinks)
+[[ $managed -gt 0 ]] || die "chezmoi manages no files; check .chezmoiroot and the source path."
+[[ $bad -eq 0 ]] || die "$bad path(s) are not symlinks into home/. Check mode = \"symlink\" in .chezmoi.toml.tmpl."
+log_ok "$managed managed paths are symlinks"
+
+log_step "opencode/AGENTS.md resolves to CLAUDE.md"
+agents="$CZ_DEST/.config/opencode/AGENTS.md"
+[[ -f "$agents" ]] || die "$agents does not resolve to a file. Check home/dot_config/opencode/symlink_AGENTS.md."
+cmp -s "$agents" "$root/home/dot_claude/CLAUDE.md" ||
+  die "opencode/AGENTS.md differs from home/dot_claude/CLAUDE.md. Fix the symlink target."
+log_ok "AGENTS.md is CLAUDE.md"
+
+log_step "chezmoi verify"
+# Scripts are excluded for the same reason as in the apply: they never ran, so
+# chezmoi would report them as pending.
+cz verify --exclude=scripts || die "chezmoi verify reports differences after apply. Run 'chezmoi diff' with the same scratch paths to see which."
+log_ok "verify exit 0"
+
+log_step "chezmoi status is empty"
+status="$(cz status --exclude=scripts)"
+[[ -z "$status" ]] || die "chezmoi status is not empty after apply:
+$status"
+log_ok "status empty"
+
+log_step "A second apply is a no-op"
+second="$(cz "${apply_args[@]}" --verbose)"
+[[ -z "$second" ]] || die "Second apply changed something:
+$second"
+log_ok "second apply changed nothing"

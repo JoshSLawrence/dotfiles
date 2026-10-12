@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+#MISE description="Fail if any commit in BASE..HEAD has an author email outside the allowlist"
+#USAGE arg "<base>" help="Exclusive start of the range (for example origin/main)"
+#USAGE arg "[head]" help="Inclusive end of the range" default="HEAD"
+set -euo pipefail
+
+# shellcheck source=mise-tasks/.lib/common.sh
+source "${MISE_PROJECT_ROOT:?run via 'mise run <task>'}/mise-tasks/.lib/common.sh"
+install_traps
+
+# GitHub does not offer a commit-email ruleset on free personal repos, so this
+# check stands in for it.
+# Exact addresses, compared case-insensitively against the whole address.
+# To allow another identity, add one line.
+allowed=(
+  # Personal addresses.
+  josh@joshlawrence.dev
+  josh.stephen.lawrence@gmail.com
+  # GitHub noreply, old form. The <id>+ form is matched in is_allowed.
+  JoshSLawrence@users.noreply.github.com
+  # Bots (numeric ids from the GitHub users API).
+  "41898282+github-actions[bot]@users.noreply.github.com"
+  "49699333+dependabot[bot]@users.noreply.github.com"
+)
+noreply_pattern='^[0-9]+\+joshslawrence@users\.noreply\.github\.com$'
+
+# is_allowed EMAIL -> 0 when EMAIL is on the allowlist. Lowercased with tr
+# because macOS ships bash 3.2, which lacks ${var,,}.
+is_allowed() {
+  local email entry
+  email="$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')"
+  for entry in "${allowed[@]}"; do
+    [[ "$email" == "$(printf '%s' "$entry" | tr '[:upper:]' '[:lower:]')" ]] && return 0
+  done
+  [[ "$email" =~ $noreply_pattern ]]
+}
+
+# Use the caller's checkout, not the mise project root: tests point this at a
+# scratch clone.
+repo="${CHECK_REPO:-$(project_root)}"
+base="${usage_base?}"
+head="${usage_head?}"
+
+# A missing ref would make git log fail, and the loop below would then see no
+# commits and pass, so verify both ends first.
+for ref in "$base" "$head"; do
+  git -C "$repo" rev-parse --verify --quiet "$ref^{commit}" >/dev/null ||
+    die "Cannot resolve '$ref' to a commit. Fetch it (git fetch origin) or check the ref name."
+done
+
+log_step "Author emails in $base..$head"
+# Captured first so a git failure stops the task instead of vanishing inside
+# process substitution.
+commits="$(git -C "$repo" log --format='%H %ae' "$base..$head")"
+
+bad=0
+total=0
+while IFS=' ' read -r hash email; do
+  [[ -n "$hash" ]] || continue
+  total=$((total + 1))
+  # Never print the address: Actions logs are public.
+  if ! is_allowed "$email"; then
+    log_error "${hash:0:9} author email not allowed"
+    bad=$((bad + 1))
+  fi
+done <<<"$commits"
+
+if [[ $bad -gt 0 ]]; then
+  log_error "$bad commit(s) use a disallowed author email."
+  log_error "Set a valid address for this repo: git config user.email <an allowed address, see mise-tasks/check/commit-email>"
+  log_error "Then rewrite the commits: git rebase --exec 'git commit --amend --no-edit --reset-author' $base"
+  exit 1
+fi
+log_ok "$total commit(s), all author emails allowed"

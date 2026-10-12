@@ -1,0 +1,9 @@
+# Code that lives in its own repo. chezmoi fetches each one on the first
+# `chezmoi apply` and only updates it on `chezmoi apply --refresh-externals`.
+
+# My Neovim config: a full git checkout to commit and push from.
+# --ff-only means a refresh never creates a merge commit in it.
+[".config/nvim"]
+    type = "git-repo"
+    url = "https://github.com/JoshSLawrence/nvim.git"
+    pull.args = ["--ff-only"]

@@ -1,0 +1,15 @@
+{
+  // Agent instruction files are excluded here and never carry disable
+  // comments. home/dot_config/opencode/symlink_AGENTS.md is a one-line
+  // symlink target, not markdown.
+  "globs": ["**/*.md"],
+  "ignores": [
+    "home/dot_claude/CLAUDE.md",
+    "**/AGENTS.md",
+    "**/symlink_AGENTS.md"
+  ],
+  "config": {
+    "default": true,
+    "MD013": { "line_length": 80 }
+  }
+}

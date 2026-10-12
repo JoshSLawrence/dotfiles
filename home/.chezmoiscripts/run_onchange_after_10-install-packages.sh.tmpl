@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+# Installs the OS packages that mise does not provide. chezmoi runs this
+# after linking dotfiles, so a failed install never blocks the links, and
+# again whenever the rendered script changes (for example when a package is
+# added below).
+set -euo pipefail
+
+{{ template "logging.sh" "install-packages" }}
+{{- if eq .platform "darwin" }}
+
+# A fresh Mac has Homebrew off PATH until the shell profile runs shellenv, and
+# chezmoi's first apply runs before that profile is linked.
+if ! command -v brew >/dev/null 2>&1; then
+    brew_bin=""
+    for candidate in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+        if [[ -x "$candidate" ]]; then
+            brew_bin="$candidate"
+            break
+        fi
+    done
+    if [[ -z "$brew_bin" ]]; then
+        log_error "Homebrew not found: install it from https://brew.sh, then run 'chezmoi apply' again"
+        exit 1
+    fi
+    eval "$("$brew_bin" shellenv)"
+fi
+
+log_info "Updating Homebrew"
+brew update
+
+log_info "Installing Homebrew packages"
+brew install fortune python@3.14 ripgrep zsh-syntax-highlighting
+
+# A font copied in by hand makes the cask fail with "already a Font at ...",
+# and run_onchange records nothing on failure, so that would fail every apply.
+shopt -s nullglob
+manual_fonts=("$HOME"/Library/Fonts/JetBrainsMonoNerdFont*)
+shopt -u nullglob
+if brew list --cask font-jetbrains-mono-nerd-font >/dev/null 2>&1 \
+    || ((${#manual_fonts[@]} > 0)); then
+    log_info "JetBrains Mono Nerd Font already installed, skipping"
+else
+    log_info "Installing JetBrains Mono Nerd Font (used by Ghostty)"
+    brew install --cask font-jetbrains-mono-nerd-font
+fi
+{{- else if or (eq .platform "linux") (eq .platform "wsl") }}
+
+packages=(
+    apt-transport-https
+    curl
+    fd-find
+    fortune-mod
+    gcc
+    make
+    python3-venv
+    ripgrep
+    unzip
+    zsh
+    zsh-syntax-highlighting
+{{- if .hasGUI }}
+    # Desktop only: X11 clipboard for Neovim, X session libraries, and
+    # fc-cache for the Nerd Font install.
+    fontconfig
+    libice6
+    libsm6
+    xclip
+{{- end }}
+)
+
+log_info "Updating apt package lists (sudo may prompt for your password)"
+sudo env DEBIAN_FRONTEND=noninteractive apt-get update
+
+log_info "Installing apt packages: ${packages[*]}"
+sudo env DEBIAN_FRONTEND=noninteractive apt-get install -y "${packages[@]}"
+{{- else }}
+
+log_error "Unsupported platform '{{ .platform }}': this repo supports macOS, Linux (Ubuntu) and WSL"
+exit 1
+{{- end }}
+
+log_info "OS packages installed"

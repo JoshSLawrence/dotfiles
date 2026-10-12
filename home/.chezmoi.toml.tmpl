@@ -1,0 +1,46 @@
+{{- /*
+  chezmoi init renders this into ~/.config/chezmoi/chezmoi.toml. Each prompt
+  is asked once per machine: the answer is stored there and reused. To change
+  an answer, delete its key from that file and run `chezmoi init` again.
+
+  This repo is public, so anything personal is asked for here and never
+  committed.
+*/ -}}
+
+{{- /* WSL reports linux; its kernel release names Microsoft. */ -}}
+{{- $platform := .chezmoi.os -}}
+{{- if and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft") -}}
+{{-   $platform = "wsl" -}}
+{{- end -}}
+
+{{- /* WSL has no Linux desktop (that is the Windows side), so only native
+       Linux needs asking. Guess from the session: a display server variable
+       means a desktop; the prompt can still override the guess. */ -}}
+{{- $hasGUI := eq $platform "darwin" -}}
+{{- if eq $platform "linux" -}}
+{{-   $guiGuess := ne (or (env "DISPLAY") (env "WAYLAND_DISPLAY")) "" -}}
+{{-   $hasGUI = promptBoolOnce . "hasGUI" "Does this Linux machine have a desktop (GUI)" $guiGuess -}}
+{{- end -}}
+
+{{- $gitName := promptStringOnce . "gitName" "Git user.name to set globally (empty to leave git alone)" "" -}}
+{{- $gitEmail := promptStringOnce . "gitEmail" "Git user.email to set globally (empty to leave git alone)" "" -}}
+
+{{- $wslGitCredentialManager := false -}}
+{{- $azureDevOpsUseHttpPath := false -}}
+{{- if eq $platform "wsl" -}}
+{{-   $wslGitCredentialManager = promptBoolOnce . "wslGitCredentialManager" "Use Git Credential Manager from Git for Windows" false -}}
+{{-   if $wslGitCredentialManager -}}
+{{-     $azureDevOpsUseHttpPath = promptBoolOnce . "azureDevOpsUseHttpPath" "Keep separate credentials per Azure DevOps repo (useHttpPath)" false -}}
+{{-   end -}}
+{{- end -}}
+
+sourceDir = {{ .chezmoi.workingTree | quote }}
+mode = "symlink"
+
+[data]
+    platform = {{ $platform | quote }}
+    hasGUI = {{ $hasGUI }}
+    gitName = {{ $gitName | quote }}
+    gitEmail = {{ $gitEmail | quote }}
+    wslGitCredentialManager = {{ $wslGitCredentialManager }}
+    azureDevOpsUseHttpPath = {{ $azureDevOpsUseHttpPath }}

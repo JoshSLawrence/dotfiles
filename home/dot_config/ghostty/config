@@ -1,0 +1,25 @@
+custom-shader = ./shaders/cursor_smear.glsl
+
+font-family = "JetBrainsMono NF Regular"
+mouse-hide-while-typing = true
+shell-integration-features = no-cursor
+cursor-style = block
+cursor-style-blink = false
+window-inherit-font-size = false
+font-feature = calt
+font-size = 19
+# adjust-cell-height = 10%
+window-padding-balance = true
+window-padding-x = 0,0
+window-padding-y = 0,0
+window-width = 92
+window-height = 35
+
+# Follow the system light/dark appearance automatically.
+# Ghostty watches the OS setting and swaps palette/background/foreground live.
+theme = light:catppuccin-latte.conf,dark:TokyoNight Night
+
+# background-image = "~/Pictures/Wallpapers/cool-cat.jpg"
+background-image-opacity = .15
+background-image-position = center
+background-image-fit = cover
