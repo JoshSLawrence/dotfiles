@@ -1,0 +1,38 @@
+{{ if or .gitName .gitEmail .wslGitCredentialManager -}}
+#!/usr/bin/env bash
+# Applies the git settings chosen at `chezmoi init` (stored in
+# ~/.config/chezmoi/chezmoi.toml, never in this public repo). Runs again when
+# an answer changes. ~/.gitconfig stays a normal file you own: this only sets
+# values and never unsets them.
+set -euo pipefail
+
+{{ template "logging.sh" "configure-git" }}
+{{- if .gitName }}
+
+log_info "Setting git user.name"
+git config --global user.name {{ .gitName | shellQuote }}
+{{- end }}
+{{- if .gitEmail }}
+
+log_info "Setting git user.email"
+git config --global user.email {{ .gitEmail | shellQuote }}
+{{- end }}
+{{- if .wslGitCredentialManager }}
+
+gcm="/mnt/c/Program Files/Git/mingw64/bin/git-credential-manager.exe"
+if [[ ! -f "$gcm" ]]; then
+    log_warn "Git Credential Manager not found at $gcm: install Git for Windows, or git will fail to authenticate"
+fi
+
+# git runs the helper through sh, so the space in the path must be escaped.
+log_info "Using Git Credential Manager from Git for Windows"
+git config --global credential.helper "${gcm// /\\ }"
+{{- end }}
+{{- if .azureDevOpsUseHttpPath }}
+
+log_info "Keeping separate credentials per Azure DevOps repo"
+git config --global credential.https://dev.azure.com.useHttpPath true
+{{- end }}
+
+log_info "git configured"
+{{ end -}}

@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Installs mise if it is missing, then the tools in ~/.config/mise/config.toml.
+# The hash below changes whenever that file does, which makes chezmoi run this
+# script again.
+# mise config hash: {{ include "dot_config/mise/config.toml" | sha256sum }}
+set -euo pipefail
+
+{{ template "logging.sh" "mise" }}
+
+mise="$HOME/.local/bin/mise"
+
+# .zshrc activates mise from ~/.local/bin, so install it there.
+if [[ -x "$mise" ]]; then
+    log_info "mise already installed at ~/.local/bin/mise, skipping"
+else
+    log_info "Installing mise from https://mise.run"
+    curl -fsSL https://mise.run | sh
+fi
+
+if [[ ! -x "$mise" ]]; then
+    log_error "mise not found at $mise: install it with 'curl -fsSL https://mise.run | sh', then run 'chezmoi apply' again"
+    exit 1
+fi
+
+log_info "Installing tools from ~/.config/mise/config.toml (this can take a while)"
+"$mise" install
+log_info "mise tools installed"

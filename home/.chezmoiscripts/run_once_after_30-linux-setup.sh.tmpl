@@ -1,0 +1,50 @@
+{{ if or (eq .platform "linux") (eq .platform "wsl") -}}
+#!/usr/bin/env bash
+# Linux and WSL only: installs the Nerd Font on a desktop and makes zsh the
+# login shell. macOS gets the font from Homebrew and already defaults to zsh.
+set -euo pipefail
+
+{{ template "logging.sh" "linux-setup" }}
+{{- if and (eq .platform "linux") .hasGUI }}
+
+# Skipped on WSL: there the terminal, and so the font, is on Windows.
+version="v3.3.0"
+font_dir="/usr/local/share/fonts/JetBrainsMono"
+
+if [[ -d "$font_dir" ]]; then
+    log_info "JetBrains Mono Nerd Font already in $font_dir, skipping"
+else
+    tmp="$(mktemp -d)"
+    trap 'rm -rf "$tmp"' EXIT
+
+    log_info "Downloading JetBrains Mono Nerd Font $version"
+    curl -fsSL -o "$tmp/JetBrainsMono.zip" \
+        "https://github.com/ryanoasis/nerd-fonts/releases/download/$version/JetBrainsMono.zip"
+
+    log_info "Unpacking to $font_dir (sudo may prompt for your password)"
+    sudo mkdir -p "$font_dir"
+    sudo unzip -q "$tmp/JetBrainsMono.zip" -d "$font_dir"
+
+    log_info "Refreshing the font cache"
+    sudo fc-cache -f
+    log_info "JetBrains Mono Nerd Font installed"
+fi
+{{- end }}
+
+zsh_path="$(command -v zsh || true)"
+if [[ -z "$zsh_path" ]]; then
+    log_error "zsh not found: the install-packages script installs it, so check its output and run 'chezmoi apply' again"
+    exit 1
+fi
+
+user="$(id -un)"
+current_shell="$(getent passwd "$user" | cut -d: -f7)"
+if [[ "$current_shell" == "$zsh_path" ]]; then
+    log_info "Login shell is already $zsh_path, skipping"
+    exit 0
+fi
+
+log_info "Changing login shell from $current_shell to $zsh_path (chsh may prompt for your password)"
+chsh -s "$zsh_path"
+log_info "Log out and back in, or run 'exec zsh', to start using zsh"
+{{ end -}}
