@@ -202,9 +202,11 @@ types, lints markdown and lints the workflow. `test` applies the dotfiles into
 a throwaway home directory and checks the result; it clones nvim, so it needs
 network access. Neither touches your real `$HOME`.
 
-Commits must use your personal or GitHub noreply email. CI fails a pull
-request otherwise (`mise run check:commit-email <base> <head>` runs the same
-check locally). To fix a branch, set `user.email` for this repo and run:
+Commit authors must be on the allowlist: my personal and GitHub noreply
+identities, plus the GitHub Actions and Dependabot bots. The list is in
+`mise-tasks/check/commit-email`. CI fails a pull request otherwise
+(`mise run check:commit-email <base> <head>` runs the same check locally). To
+fix a branch, set `user.email` for this repo and run:
 
 ```bash
 git rebase --exec 'git commit --amend --no-edit --reset-author' origin/main
