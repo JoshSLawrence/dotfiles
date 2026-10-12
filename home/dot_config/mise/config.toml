@@ -3,7 +3,13 @@ minimum_release_age = "24h"
 minimum_release_age_excludes = ["claude", "opencode"]
 auto_update = true
 
+# mise asks gh for a GitHub token, so API calls are authenticated without a
+# token in an environment variable. Global-only: mise ignores it in projects.
+[settings.github]
+credential_command = 'gh auth token --hostname "$MISE_CREDENTIAL_HOST"'
+
 [tools]
+chezmoi = "latest"
 node = "26.4.0"
 opentofu = "latest"
 terraform = "latest"
@@ -17,7 +23,6 @@ tflint = "latest"
 pipx = "latest"
 github-cli = "latest"
 neovim = "latest"
-tmux = "latest"
 lazygit = "latest"
 kubecolor = "latest"
 krew = "latest"
