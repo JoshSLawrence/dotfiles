@@ -8,10 +8,15 @@ set -euo pipefail
 {{- if and (eq .platform "linux") .hasGUI }}
 
 # Skipped on WSL: there the terminal, and so the font, is on Windows.
-version="v3.3.0"
+version="v3.5.1"
 font_dir="/usr/local/share/fonts/JetBrainsMono"
 
-if [[ -d "$font_dir" ]]; then
+# Test for a font file, not the directory: a half-finished install leaves the
+# directory behind and would otherwise never be retried.
+shopt -s nullglob
+installed_fonts=("$font_dir"/*.ttf)
+shopt -u nullglob
+if ((${#installed_fonts[@]} > 0)); then
     log_info "JetBrains Mono Nerd Font already in $font_dir, skipping"
 else
     tmp="$(mktemp -d)"
@@ -45,6 +50,10 @@ if [[ "$current_shell" == "$zsh_path" ]]; then
 fi
 
 log_info "Changing login shell from $current_shell to $zsh_path (chsh may prompt for your password)"
-chsh -s "$zsh_path"
-log_info "Log out and back in, or run 'exec zsh', to start using zsh"
+# Not fatal: run_once would otherwise retry, and prompt, on every apply.
+if chsh -s "$zsh_path"; then
+    log_info "Log out and back in, or run 'exec zsh', to start using zsh"
+else
+    log_warn "Could not change the login shell; run: chsh -s $zsh_path"
+fi
 {{ end -}}
