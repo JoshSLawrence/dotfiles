@@ -16,7 +16,7 @@ alias myip='curl -w "\n" "https://ipinfo.io/ip"'
 alias bbox='kubectl run -it --rm busybox --image=busybox --restart=Never -- sh'
 alias oc='opencode'
 alias ghostconf='nvim "$XDG_CONFIG_HOME/ghostty/config"'
-mkdir -p $HOME/.kube/configs
+mkdir -p "$HOME/.kube/configs"
 alias space="spacectl"
 alias tfdocs="terraform-docs"
 alias pcra="pre-commit run --all"
