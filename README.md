@@ -70,11 +70,14 @@ once per machine; new shells warn when `gh` is missing or logged out.
 ### .NET
 
 mise owns `dotnet`. A machine set up with the old `setup.sh` has the SDK in
-`~/.dotnet`; run this once there:
+`~/.dotnet`. After `chezmoi apply`, open a new shell and run this once there:
 
 ```bash
-mise uninstall dotnet --all && mise install
+mise uninstall dotnet --all && env -u DOTNET_ROOT mise install
 ```
+
+Use a new shell because one opened before the switch still exports
+`DOTNET_ROOT=~/.dotnet`, and mise would reinstall into that folder.
 
 mise installs into `$DOTNET_ROOT` when it is set, so installs made while the
 old `DOTNET_ROOT=$HOME/.dotnet` was exported live in `~/.dotnet`. This repo no
@@ -106,7 +109,8 @@ committing.
 from there. A new clone uses the https URL; to push over SSH, run:
 
 ```bash
-git -C ~/.config/nvim remote set-url --push origin git@github.com:JoshSLawrence/nvim.git
+git -C ~/.config/nvim remote set-url --push origin \
+  git@github.com:JoshSLawrence/nvim.git
 ```
 
 `~/.exports_ignored` is sourced by `~/.exports` if it exists. Put
