@@ -67,6 +67,19 @@ mise reads a GitHub token from `gh` (`credential_command` in
 limited and no token sits in an environment variable. Run `gh auth login`
 once per machine; new shells warn when `gh` is missing or logged out.
 
+### .NET
+
+mise owns `dotnet`. A machine set up with the old `setup.sh` has the SDK in
+`~/.dotnet`; run this once there:
+
+```bash
+mise uninstall dotnet --all && mise install
+```
+
+mise installs into `$DOTNET_ROOT` when it is set, so installs made while the
+old `DOTNET_ROOT=$HOME/.dotnet` was exported live in `~/.dotnet`. This repo no
+longer sets it. `~/.dotnet/tools` stays on `PATH` for `dotnet tool install -g`.
+
 ## Day to day
 
 Edits to tracked files need no command: the file in `$HOME` is the repo
