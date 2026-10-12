@@ -1,5 +1,0 @@
-# Herdr writes runtime state (sockets, logs, session/plugin state) into this
-# directory, which is symlinked from ~/.config/herdr. Track only config.toml.
-*
-!.gitignore
-!config.toml
