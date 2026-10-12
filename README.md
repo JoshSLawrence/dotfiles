@@ -103,7 +103,17 @@ committing.
 
 `~/.config/nvim` is a clone of
 [JoshSLawrence/nvim](https://github.com/JoshSLawrence/nvim): commit and push
-from there.
+from there. A new clone uses the https URL; to push over SSH, run:
+
+```bash
+git -C ~/.config/nvim remote set-url --push origin git@github.com:JoshSLawrence/nvim.git
+```
+
+`~/.exports_ignored` is sourced by `~/.exports` if it exists. Put
+machine-local exports there; it is not tracked. It loads into every shell, so
+don't put `MISE_GITHUB_TOKEN` in it (that overrides the `gh`-based
+`credential_command`) or broad cloud credentials (prefer a per-project mise
+env).
 
 ## What each platform gets
 
@@ -139,8 +149,6 @@ daemon is involved.
 
 How each tool reacts:
 
-<!-- markdownlint-disable MD013 -->
-
 | Tool       | Dark              | Light             | Updates          |
 | ---------- | ----------------- | ----------------- | ---------------- |
 | Ghostty    | TokyoNight Night  | TokyoNight Day    | live (native)    |
@@ -150,8 +158,6 @@ How each tool reacts:
 | lazygit    | Tokyonight        | Catppuccin Latte  | next launch      |
 | btop       | Tokyo Night       | Catppuccin Latte  | next launch      |
 | k9s        | Catppuccin Mocha  | Catppuccin Latte  | next launch      |
-
-<!-- markdownlint-disable-next-line MD013 -->
 
 Use the `theme` command to override the shell-driven tools (prompt, lazygit,
 btop, k9s): `theme light`, `theme dark`, `theme auto` (follow the OS again),
@@ -186,6 +192,10 @@ copy.
   back into a plain file first:
   `cp <file> <file>.tmp && mv <file>.tmp <file> && chezmoi forget <file>`.
 - Removing or renaming a file in the repo likewise leaves a dead link in
-  `$HOME`. Find them with
-  `find ~ ~/.config ~/.claude -maxdepth 3 -type l ! -exec test -e {} \; -print`
-  and delete the ones you no longer want with `rm`.
+  `$HOME`. Find them with the command below (it only matches links into
+  this repo), and delete the ones you no longer want with `rm`.
+
+  ```bash
+  find ~ -maxdepth 4 -type l -lname "$HOME/source/github/dotfiles/*" \
+    ! -exec test -e {} \; -print
+  ```
