@@ -28,10 +28,11 @@ for f in "${sourced[@]}" "${scripts[@]}" "${tasks[@]}"; do
 done
 log_ok "syntax ok"
 
-log_step "shellcheck (${#sourced[@]} + ${#scripts[@]} + ${#tasks[@]} files)"
-# Warning and above only: dot_exports sources an optional, untracked file; the
-# resulting info-level SC1091 (file not found) cannot be satisfied in CI.
-shellcheck -x -s bash --severity=warning "${sourced[@]}" "${scripts[@]}" "${tasks[@]}"
+log_step "shellcheck"
+shellcheck -x -s bash "${scripts[@]}" "${tasks[@]}" home/dot_aliases
+# dot_exports sources ~/.exports_ignored, which is optional, untracked and
+# machine-local, so shellcheck can never follow it (SC1091).
+shellcheck -x -s bash --exclude=SC1091 home/dot_exports
 log_ok "shellcheck clean"
 
 log_step "zsh -n home/dot_zshrc"
