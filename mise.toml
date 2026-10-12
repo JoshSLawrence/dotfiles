@@ -5,7 +5,7 @@
 chezmoi = "2.73.0"
 shellcheck = "0.11.0"
 # markdownlint-cli2 is an npm package, so it needs node.
-node = "24.21.0"
+node = "26.4.0"
 "npm:markdownlint-cli2" = "0.23.3"
 actionlint = "1.7.12"
 
