@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+#MISE description="Fail if any commit in BASE..HEAD has an author email outside the allowed domains"
+#USAGE arg "<base>" help="Exclusive start of the range (for example origin/main)"
+#USAGE arg "[head]" help="Inclusive end of the range" default="HEAD"
+set -euo pipefail
+
+# shellcheck source=mise-tasks/.lib/common.sh
+source "${MISE_PROJECT_ROOT:?run via 'mise run <task>'}/mise-tasks/.lib/common.sh"
+install_traps
+
+# GitHub does not offer a commit-email ruleset on free personal repos, so this
+# check stands in for it.
+allowed='@(joshlawrence\.dev|users\.noreply\.github\.com)$'
+
+# Use the caller's checkout, not the mise project root: tests point this at a
+# scratch clone.
+repo="${CHECK_REPO:-$(project_root)}"
+base="${usage_base?}"
+head="${usage_head?}"
+
+log_step "Author emails in $base..$head"
+bad=0
+total=0
+while IFS=' ' read -r hash email; do
+  total=$((total + 1))
+  if ! [[ "$email" =~ $allowed ]]; then
+    log_error "${hash:0:9} has author email '$email'"
+    bad=$((bad + 1))
+  fi
+done < <(git -C "$repo" log --format='%H %ae' "$base..$head")
+
+if [[ $bad -gt 0 ]]; then
+  log_error "$bad commit(s) use a disallowed author email."
+  log_error "Set a valid address for this repo: git config user.email <you>@joshlawrence.dev"
+  log_error "Then rewrite the commits: git rebase --exec 'git commit --amend --no-edit --reset-author' $base"
+  exit 1
+fi
+log_ok "$total commit(s), all author emails allowed"
