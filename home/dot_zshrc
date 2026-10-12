@@ -4,6 +4,14 @@ source ~/.aliases
 # mise handles oh-my-posh on PATH must be for prompt setup
 eval "$(~/.local/bin/mise activate zsh)"
 
+# mise gets its GitHub token from `gh` (credential_command in the mise config),
+# so without a working gh login its GitHub API calls are unauthenticated and
+# can be rate limited. Warn once per shell; the token is never printed or
+# exported.
+if ! command -v gh >/dev/null 2>&1 || ! gh auth token --hostname github.com >/dev/null 2>&1; then
+  echo "warning: gh is missing or not logged in, so mise's GitHub requests are unauthenticated and may be rate limited: run 'gh auth login'" >&2
+fi
+
 # ── System light/dark theme integration ─────────────────────────────────────
 # Ghostty, Neovim, and herdr follow the OS appearance on their own. The tools
 # below can't hot-swap, so they pick their theme here at shell start based on
@@ -33,7 +41,7 @@ fi
 # zoxide should always be setup after exports, aliases, prompt
 eval "$(zoxide init zsh)"
 
-# Use emacs mode for line editing (override tmux vi mode)
+# Use emacs mode for line editing (zsh picks vi mode when EDITOR is vi-like)
 bindkey -e
 
 # Completion should always be configured after exports, aliases, prompt, and misc evals
@@ -53,7 +61,11 @@ fi
 fortune | cowsay
 
 # pnpm
-export PNPM_HOME="/Users/josh/Library/pnpm"
+if [[ "$(uname)" == "Darwin" ]]; then
+  export PNPM_HOME="$HOME/Library/pnpm"
+else
+  export PNPM_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/pnpm"
+fi
 case ":$PATH:" in
   *":$PNPM_HOME/bin:"*) ;;
   *) export PATH="$PNPM_HOME/bin:$PATH" ;;
