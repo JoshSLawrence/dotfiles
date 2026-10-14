@@ -30,16 +30,12 @@
 .config/cheat
 .config/chezmoi
 .config/configstore
-.config/crush
-.config/devin
 .config/gh
 .config/github-copilot
 .config/go
-.config/goose
 .config/helm
 .config/homebrew
 .config/infracost
-.config/kimchi
 .config/lazysql
 .config/NuGet
 .config/opentofu
