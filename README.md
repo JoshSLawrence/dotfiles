@@ -82,6 +82,39 @@ mise reads a GitHub token from `gh` (`credential_command` in
 limited and no token sits in an environment variable. Run `gh auth login`
 once per machine; new shells warn when `gh` is missing or logged out.
 
+### Tool versions
+
+`home/dot_config/mise/mise.lock` pins the exact version of every tool in
+`config.toml`, `"latest"` included, with checksums for Linux (x64 and arm64),
+macOS (arm64) and Windows (x64). Every machine installs the same versions.
+The dependency locks of npm and pypi tools sit beside it in `.mise/locks`,
+which chezmoi links into place as a whole directory.
+
+Upgrade on any machine, then commit the lock with any new `.mise/locks`
+entries:
+
+```bash
+mise upgrade
+git -C ~/source/github/dotfiles add home/dot_config/mise
+```
+
+Other machines pick the versions up with `chezmoi update`, which reruns
+`mise install` when the lock changes. A tool missing on one platform is
+limited with `os = [...]` in `config.toml`, so `mise install` skips it there.
+
+### Global packages
+
+Packages installed with `npm install -g` or `pip install` live inside one node
+or Python version and disappear when mise upgrades it. Commands from npm or
+pypi go in `config.toml` instead (`"npm:gitignore" = "latest"`), where mise
+installs and locks them apart from the runtime. Python libraries for scripts
+go in `home/dot_default-python-packages`, which mise installs into every new
+Python version. To add one to the version already installed:
+
+```bash
+python -m pip install -r ~/.default-python-packages
+```
+
 ### .NET
 
 mise owns `dotnet`. A machine set up with the old `setup.sh` has the SDK in

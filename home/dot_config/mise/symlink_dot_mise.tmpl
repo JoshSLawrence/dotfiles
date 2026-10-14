@@ -1,0 +1,4 @@
+{{- /* mise keeps the dependency locks of npm and pypi tools in .mise/locks
+       next to mise.lock, and installs fail without them. Linking the whole
+       directory into the repo lets mise write new ones straight into git. */ -}}
+{{ .chezmoi.sourceDir }}/dot_config/mise/.mise

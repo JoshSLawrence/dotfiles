@@ -1,26 +1,33 @@
 [settings]
 minimum_release_age = "24h"
 minimum_release_age_excludes = ["claude", "opencode"]
-auto_update = true
+self_update.auto = true
+# Lock only the platforms this config runs on: mise.lock otherwise covers
+# seven, and installs on any other platform add entries to it.
+lockfile_platforms = ["linux-x64", "linux-arm64", "macos-arm64", "windows-x64"]
 
 # mise asks gh for a GitHub token, so API calls are authenticated without a
 # token in an environment variable. Global-only: mise ignores it in projects.
 [settings.github]
 credential_command = 'gh auth token --hostname "$MISE_CREDENTIAL_HOST"'
 
+# mise.lock pins the exact version of every tool, "latest" included, so all
+# machines run the same versions. `mise upgrade` moves them; commit the lock.
+# Prefixes mark the tools whose version line matters.
 [tools]
 chezmoi = "latest"
-node = "26.4.0"
+node = "26"
 opentofu = "latest"
 terraform = "latest"
-kubectl = "1.37.0"
+kubectl = "1.37"
 go = "latest"
 terraform-docs = "latest"
 trivy = "latest"
 cookiecutter = "latest"
-pre-commit = "latest"
+# The pypi build runs everywhere; the aqua one has no Windows release.
+"pypi:pre-commit" = "latest"
 tflint = "latest"
-pipx = "latest"
+pipx = { version = "latest", os = ["linux", "macos"] }
 github-cli = "latest"
 neovim = "latest"
 lazygit = "latest"
@@ -35,12 +42,14 @@ azure-cli = "latest"
 powershell = "latest"
 zoxide = "latest"
 cowsay = "latest"
+"npm:gitignore" = "latest"
 arduino-cli = "latest"
 kind = "latest"
 argocd = "latest"
 spacectl = "latest"
-aws = { version = "latest", symlink_bins = "true" }
-btop =  { version = "latest", os = ["linux", ] }
+# No Windows release through mise: install the AWS CLI MSI there.
+aws = { version = "latest", symlink_bins = "true", os = ["linux", "macos"] }
+btop = { version = "latest", os = ["linux"] }
 lazydocker = "latest"
 tree-sitter = "latest"
 sqlc = "latest"
@@ -49,7 +58,8 @@ fd = "latest" # required for nvim plugin: snacks (explorer search)
 fastfetch = "latest"
 usage = "latest"
 bat = "latest"
-kiota = "latest"
+# No ARM Linux release.
+kiota = { version = "latest", os = ["linux/x64", "macos", "windows"] }
 claude = "latest"
 pnpm = "latest"
 shellcheck = "latest"
@@ -60,7 +70,11 @@ conftest = "latest"
 pi = "latest"
 crictl = "latest"
 minikube = "latest"
-python = "3.14.7"
+python = "3.14"
 uv = "latest"
 k3d = "latest"
 cheat = "latest"
+copilot = "latest"
+codex = "latest"
+"aqua:pressly/goose" = "latest"
+postgres = "latest"
