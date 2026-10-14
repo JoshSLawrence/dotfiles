@@ -43,6 +43,9 @@ powershell = "latest"
 zoxide = "latest"
 cowsay = "latest"
 "npm:gitignore" = "latest"
+# SOQL language server for nvim. The package has no bin; nvim runs its
+# lib/server.js with node (see lua/plugins/lsp-config.lua in the nvim repo).
+"npm:@salesforce/soql-language-server" = "latest"
 arduino-cli = "latest"
 kind = "latest"
 argocd = "latest"

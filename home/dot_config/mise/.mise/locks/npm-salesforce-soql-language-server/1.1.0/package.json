@@ -1,0 +1,7 @@
+{
+  "name": "mise-npm-install",
+  "private": true,
+  "dependencies": {
+    "@salesforce/soql-language-server": "1.1.0"
+  }
+}
