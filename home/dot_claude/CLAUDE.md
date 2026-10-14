@@ -8,74 +8,46 @@ When you learn something important during a session (e.g., a gotcha,
 convention, or correction), **add it to this file** so future sessions retain
 the knowledge. Guidelines:
 
-- **Only add project-agnostic learnings** — project-specific lessons go in that
-  repo's own CLAUDE.md
+- **Only add project-agnostic learnings** — project-specific lessons go in
+  that repo's own CLAUDE.md
 - **Only add high-level learnings** — avoid low-value details
 - **Ask the user** when adding to this file
 - Keep entries concise and actionable
+- **Keep the file short** — it loads into every session. Skip anything a
+  capable model already does by default; prefer a hook, linter or CI check
+  for rules that must always hold
 
 ## Worktrees
 
-Also use a new git worktree for units of work that are logically separate,
-you must not collide with other work in progress by other humans or agents.
+Use a new git worktree for each logically separate unit of work, so it can't
+collide with work in progress by other humans or agents. Work in the main
+checkout when the user says to.
 
-## Formatting & Style
+## Scope and Ambiguity
 
-### Directory Trees
+- **Do what was asked** — don't add features, refactors or "improvements"
+  beyond the request. Mention them instead
+- **Ask instead of guessing** when a requirement is ambiguous and a wrong
+  guess would be costly to undo. Give a recommendation with the question
 
-Use `text` as the code block language. Sort entries **lexically**: dotfiles
-first (sorted among themselves, ignoring the dot), then everything else
-alphabetically (case-insensitive).
+## Docs & Commits
 
 ### Keep Docs in Sync
 
 When information appears in multiple places, update all copies in the same
 change. Don't let documentation drift apart.
 
-### Markdown Portability
-
-- `> [!NOTE]` / `> [!IMPORTANT]` is GitHub-only. Use `> **Note:** ...` instead
-- `<details>`/`<summary>` is not universally supported
-- Separate paragraphs with blank lines, not trailing whitespace
-
-### Markdown Line Length
-
-Keep markdown files within 80 columns. For unwrappable content (tables, URLs),
-disable the linter for that section with `<!-- markdownlint-disable MD013 -->`.
-Agent instruction files (`CLAUDE.md`, `AGENTS.md`) never get disable comments:
-exclude them in the repository's linter config instead.
-
-### Markdown Tables
-
-Tables should be readable in raw markdown. Avoid wrapping lines in the middle of
-a table row. Columns should be aligned with spaces, not tabs.
-
-When realigning tables with a script, skip fenced code blocks: a line starting
-with `|` (KQL, shell pipes) is not a table row. Diff code blocks before and
-after; markdownlint won't catch a query mangled into a table.
-
 ### Generated Files Stay Generated
 
 If a file is auto-generated (e.g., README from terraform-docs), edit the source
 inputs and regenerate — don't hand-edit the output.
 
-### Keep Code Blocks Copy-Paste Friendly
+### Commit Messages
 
-Put explanations outside the block, not as inline comments that break
-copy-paste.
+Use [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`,
+`fix(scope):`, `refactor!:`) unless the repository uses another convention.
 
 ## Code Quality
-
-### Comments: Explain "Why" Not "What"
-
-The code shows *what* it does; comments should explain *why* it does it —
-intent, edge cases, non-obvious reasons for a choice. Don't narrate the code.
-
-### Follow Existing Patterns
-
-When contributing to an established codebase, match the existing style and
-patterns even if you'd do it differently in a greenfield project. Consistency
-trumps personal preference.
 
 ### Make Errors Actionable
 
@@ -83,39 +55,13 @@ Error messages should tell the user what went wrong *and* suggest what to do
 about it. "Connection failed" is less useful than "Connection failed: check
 that VPN is connected and retry."
 
-### Prefer Editing Over Creating
-
-When adding functionality, look for existing files or functions to extend
-before creating new ones. Reduces fragmentation and keeps related logic
-together.
-
 ### CLAUDE.md vs AGENTS.md
 
 Respect existing project conventions. However, if there is an opportunity for
 a rules file, create a `CLAUDE.md` and symlink `AGENTS.md` to it rather than
 duplicating content.
 
-## Shell Scripts
-
-- Use `#!/usr/bin/env bash` shebang
-- Always `set -euo pipefail` at the top
-- Run `chmod +x` on new scripts
-
-### Log Every Significant Step
-
-Pipeline/script logs should tell a clear story someone can follow without
-reading the source. Log before operations, warn for non-fatal issues, error
-before failures. Create helper functions for color-coded logging, e.g.
-`log_info`, `log_warn`, `log_error`.
-
-### Temporarily Disable errexit to Handle Errors Gracefully
-
-When you are aware of and can address/handle an error yourself instead of
-immediately exiting: given the `set -euo pipefail` behavior, you should
-temporarily disable exit-on-error, handle the error, then re-enable
-exit-on-error.
-
-### Isolate Scripts That Create Git Repos
+## Isolate Throwaway Git Repos
 
 Scripts and tests that create throwaway git repos must first
 `unset $(git rev-parse --local-env-vars)`. Run from a git hook, they inherit
@@ -156,50 +102,37 @@ that will add value, do it. Guidelines:
   make a hook pass. Only add one if the user explicitly approves after you've
   explained the finding.
 - **Prefer fixing the underlying issue** over suppressing the finding.
-
-## CI/CD
-
-### Job Timeouts Must Exceed Tool Timeouts
-
-Set a CI job's timeout above the longest timeout of the tool it runs (e.g.
-OpenTofu provider resource timeouts, often 60 minutes). If the runner is
-killed first, the tool can't fail cleanly: state stays locked and
-half-applied changes go unrecorded. Comment the reason next to the setting.
+- **Never bypass hooks** — no `--no-verify`, `git commit -n` or disabling a
+  hook to get a commit or push through.
+- **Never weaken tests to get a pass** — don't skip, delete or loosen
+  assertions without asking. A failing test is a finding, not an obstacle.
 
 ## Agent Workflow
 
-**Ask upfront, don't assume.** At the start of each new ask that is
-multi-step or non-trivial, ask whether to use the orchestrator pattern below
-or work directly in the main session. Don't default to either. Skip the
-question for trivial asks (a quick edit, a lookup, a one-line fix) and just
-work directly. Honor the answer for that ask only; it doesn't carry over to
-the next one unless the user says so.
+Work directly in the main session by default. Delegate to subagents only when
+it pays for itself:
 
-When the user opts in, the main session orchestrates and delegates to agents:
+- **Independent parallel work**, e.g. the same change across several repos.
+- **Context-heavy searches** where only the conclusion matters.
+- **Independent review** of a large change: a code-review command (e.g.
+  `/code-review`) or a fresh reviewer agent that had no part in the
+  implementation. Re-review each round of fixes until it reports clean.
 
-| Role         | Model            | Does                                                   |
-| ------------ | ---------------- | ------------------------------------------------------ |
-| Orchestrator | the main session | Plans, briefs, verifies, commits, pushes, merges       |
-| Designer     | Opus             | Investigates and writes a design file; changes nothing |
-| Reviewer     | Opus             | Reviews one domain read-only; reports findings         |
-| Worker       | Sonnet           | Implements a design or a review's findings             |
+For large multi-workstream efforts, propose a design/implement/review split
+and ask before fanning out.
 
-- **Design, implement, review.** For anything non-trivial, an Opus agent
-  designs first and writes the design to a file outside the repo. A Sonnet
-  agent implements it, and an Opus agent reviews the result.
-- **The same reviewer re-reviews** each round of fixes until it reports clean.
-  Prefer a fresh agent for a new, large piece of work, so it starts without
-  stale context.
+When delegating:
+
 - **Brief precisely.** Give each agent the files to read, the decisions
   already made, what it may and may not run, and exactly what to report.
 - **Verify agents' claims** before acting on them: re-run their tests, read
   their diffs, check anything destructive read-only. An agent's report is
   not proof.
-- **Ask the user** for decisions that are theirs (scope, trade-offs, access),
-  with a recommendation, and record durable decisions in memory.
 - **Agents never** push, merge, tag, release, apply infrastructure or change
-  settings and config; the orchestrator does those after review and green
+  settings and config; the main session does those after review and green
   CI. Infrastructure applies only through CI, with the user's approval.
-- **Agents work in their own git worktree** when the user may be editing the
-  main checkout, stage only the files they changed, and commit with the
-  user's normal identity and signing.
+- **Agents work in their own git worktree**, stage only the files they
+  changed, and commit with the user's normal identity and signing.
+
+**Ask the user** for decisions that are theirs (scope, trade-offs, access),
+with a recommendation, and record durable decisions in memory.
