@@ -1,0 +1,23 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      gitignore:
+        specifier: 0.7.0
+        version: 0.7.0
+
+packages:
+
+  gitignore@0.7.0:
+    resolution: {integrity: sha512-6iE891OyeYQYVvdoWI/hcxDWJ0sOngSpIRadxLoYbsnZdqWIUsEfx+IrOpW3d/zWBA/eKYvs6ZZx6ogz2wEGoQ==}
+    hasBin: true
+
+snapshots:
+
+  gitignore@0.7.0: {}

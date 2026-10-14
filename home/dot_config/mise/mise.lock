@@ -473,6 +473,7 @@ url = "https://awscli.amazonaws.com/awscli-exe-linux-aarch64-2.38.0.zip"
 url = "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.38.0.zip"
 
 [tools.aws."platforms.macos-arm64"]
+checksum = "blake3:081b636494ebca31e75a6a55592b23565e75789b00ea49627b3505d18188f8c4"
 url = "https://awscli.amazonaws.com/AWSCLIV2-2.38.0.pkg"
 
 [[tools.azure-cli]]
@@ -1204,6 +1205,12 @@ url = "https://nodejs.org/dist/v26.11.1/node-v26.11.1-darwin-arm64.tar.gz"
 checksum = "sha256:97f36a8a9684ff0d3e35758b4610fef5b628a5880e96f2ccc11240e5daf9934e"
 url = "https://nodejs.org/dist/v26.11.1/node-v26.11.1-win-x64.zip"
 
+[[tools."npm:gitignore"]]
+version = "0.7.0"
+aube = { path = ".mise/locks/npm-gitignore/0.7.0", digest = "sha256:5c3b0175b4dd6e497ac4fc4826731a5f78101ff603b1d20a815c50c5ccb5426d" }
+backend = "npm:gitignore"
+specifiers = ["latest"]
+
 [[tools.oh-my-posh]]
 version = "31.8.0"
 backend = "aqua:JanDeDobbeleer/oh-my-posh"
@@ -1599,6 +1606,7 @@ url = "https://downloads.sqlc.dev/sqlc_1.31.1_linux_arm64.tar.gz"
 url = "https://downloads.sqlc.dev/sqlc_1.31.1_linux_amd64.tar.gz"
 
 [tools.sqlc."platforms.macos-arm64"]
+checksum = "blake3:a4b73d5389eecc7a03e8c821f04ecb25d7481c022f73e12bffa8d79da8e56e83"
 url = "https://downloads.sqlc.dev/sqlc_1.31.1_darwin_arm64.tar.gz"
 
 [tools.sqlc."platforms.windows-x64"]

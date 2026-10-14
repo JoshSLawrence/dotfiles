@@ -1,0 +1,4 @@
+# mise installs these into every Python version it installs, so they survive
+# upgrades. Commands belong in mise as pypi: tools instead.
+azure-identity
+requests
