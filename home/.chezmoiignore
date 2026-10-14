@@ -10,23 +10,114 @@
 .config/herdr/*
 !.config/herdr/config.toml
 
-# OpenCode installs its plugin dependencies here.
+# OpenCode installs its plugin dependencies and keeps its state here.
 .config/opencode/bun.lock
+.config/opencode/cli.json
 .config/opencode/node_modules
 .config/opencode/package-lock.json
 .config/opencode/package.json
+.config/opencode/service.json
 
 .config/lazygit/state.yml
 .config/oh-my-posh/*.omp.json.bak
 
 # Other tools' config that is deliberately not tracked. chezmoi keeps its own
 # machine-specific config and state in .config/chezmoi.
+.config/.copilot
+.config/act
+.config/argocd
+.config/cagent
+.config/cheat
 .config/chezmoi
 .config/configstore
+.config/crush
+.config/devin
+.config/gh
 .config/github-copilot
 .config/go
+.config/goose
+.config/helm
+.config/homebrew
+.config/infracost
+.config/kimchi
+.config/lazysql
 .config/NuGet
+.config/opentofu
+.config/raycast
+.config/regal
+.config/tanstack
 .config/wslu
+.config/yazi
+
+# Everything else in $HOME: OS folders, shell history, caches, credentials and
+# other tools' config and state.
+.ado_orgs.cache
+.agents
+.aspnet
+.azure
+.azure-devops
+.azurefunctions
+.bash_history
+.bun
+.cache
+.cagent
+.CFUserTextEncoding
+.claude.json
+.claude.json.backup
+.codex
+.cookiecutter_replay
+.cookiecutters
+.copilot
+.dacfx
+.docker
+.dotnet
+.exports_ignored
+.fx
+.gitconfig
+.gitconfig.d
+.gnupg
+.gnupg_pre_2.1
+.IdentityService
+.kube
+.kubestronaut
+.local
+.mailmap
+.mg
+.minikube
+.npm
+.nuget
+.pi
+.pi-lens
+.python_history
+.shiv
+.sigstore
+.ssh
+.templateengine
+.terraform.d
+.tflint.d
+.Trash
+.vim
+.viminfo
+.vscode
+.vscode-shared
+.wget-hsts
+.zcompcache
+.zcompdump
+.zprofile
+.zsh
+.zsh_history
+.zsh_sessions
+Applications
+Desktop
+Documents
+Downloads
+go
+Library
+Movies
+Music
+Pictures
+Public
+source
 
 {{ if not .hasGUI -}}
 # Ghostty needs a desktop. On WSL the terminal runs on the Windows side.
