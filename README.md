@@ -82,6 +82,26 @@ mise reads a GitHub token from `gh` (`credential_command` in
 limited and no token sits in an environment variable. Run `gh auth login`
 once per machine; new shells warn when `gh` is missing or logged out.
 
+### Tool versions
+
+`home/dot_config/mise/mise.lock` pins the exact version of every tool in
+`config.toml`, `"latest"` included, with checksums for Linux (x64 and arm64),
+macOS (arm64) and Windows (x64). Every machine installs the same versions.
+The dependency locks of npm and pypi tools sit beside it in `.mise/locks`,
+which chezmoi links into place as a whole directory.
+
+Upgrade on any machine, then commit the lock with any new `.mise/locks`
+entries:
+
+```bash
+mise upgrade
+git -C ~/source/github/dotfiles add home/dot_config/mise
+```
+
+Other machines pick the versions up with `chezmoi update`, which reruns
+`mise install` when the lock changes. A tool missing on one platform is
+limited with `os = [...]` in `config.toml`, so `mise install` skips it there.
+
 ### .NET
 
 mise owns `dotnet`. A machine set up with the old `setup.sh` has the SDK in

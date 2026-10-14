@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# Installs mise if it is missing, then the tools in ~/.config/mise/config.toml.
-# The hash below changes whenever that file does, which makes chezmoi run this
-# script again.
+# Installs mise if it is missing, then the tools in ~/.config/mise/config.toml
+# at the versions in mise.lock. The hashes below change whenever either file
+# does, which makes chezmoi run this script again.
 # mise config hash: {{ include "dot_config/mise/config.toml" | sha256sum }}
+# mise lock hash: {{ include "dot_config/mise/mise.lock" | sha256sum }}
 set -euo pipefail
 
 {{ template "logging.sh" "mise" }}
