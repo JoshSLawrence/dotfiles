@@ -134,6 +134,13 @@ description = "run lazygit"
 # [worktrees]
 # directory = "~/.herdr/worktrees"
 
+# herdr-bar: https://github.com/jeffarese/herdr-bar
+[[keys.command]]
+key = "prefix+k"
+type = "plugin_action"
+command = "herdr-bar.open"
+description = "command bar"
+
 [ui]
 # Sidebar width (auto-scaled based on workspace names, this sets the default)
 sidebar_width = 27
