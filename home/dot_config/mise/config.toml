@@ -1,6 +1,6 @@
 [settings]
 minimum_release_age = "24h"
-minimum_release_age_excludes = ["claude", "opencode"]
+minimum_release_age_excludes = ["claude", "npm:@opencode/cli"]
 self_update.auto = true
 # Lock only the platforms this config runs on: mise.lock otherwise covers
 # seven, and installs on any other platform add entries to it.
@@ -34,7 +34,9 @@ lazygit = "latest"
 kubecolor = "latest"
 krew = "latest"
 k9s = "latest"
-opencode = "latest"
+# OpenCode v2 ships on npm as @opencode/cli, not on GitHub releases, so
+# aqua stops at v1. Its postinstall links the platform binary.
+"npm:@opencode/cli" = { version = "latest", allow_builds = ["@opencode/cli"] }
 helm = "latest"
 oh-my-posh = "latest"
 fzf = "latest"
