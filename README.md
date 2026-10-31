@@ -219,6 +219,10 @@ Herdr: only `~/.config/herdr/config.toml` is tracked. The rest of
 `~/.config/herdr` (sessions, sockets, logs) is a normal local directory,
 listed in `home/.chezmoiignore`.
 
+Rex: `~/.config/rex/init.lua` holds keybindings that mirror the herdr
+config. They use the same `ctrl+space` prefix, so moving between the two
+feels the same.
+
 ## Development
 
 The dev tools and checks live in `mise.toml` at the repo root, outside `home/`

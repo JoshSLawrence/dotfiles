@@ -47,6 +47,10 @@ inputs and regenerate — don't hand-edit the output.
 Use [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`,
 `fix(scope):`, `refactor!:`) unless the repository uses another convention.
 
+### Branch Names
+
+Branches names should also follow the semantic/conventional model.
+
 ## Code Quality
 
 ### Make Errors Actionable

@@ -19,7 +19,12 @@ window-height = 35
 # Ghostty watches the OS setting and swaps palette/background/foreground live.
 theme = light:catppuccin-latte.conf,dark:TokyoNight Night
 
-# background-image = "~/Pictures/Wallpapers/cool-cat.jpg"
-background-image-opacity = .15
-background-image-position = center
-background-image-fit = cover
+# Force fg/bg contrast so text on colored backgrounds (e.g. pre-commit's
+# green "Passed") stays readable in both themes. 3 = WCAG "large text".
+# minimum-contrast = 3
+
+# background-image = "~/Pictures/Wallpapers/neorarty/before.jpg"
+# background-image-opacity = .2
+# background-image-position = center
+# background-image-fit = cover
+# background-blur = macos-glass-clear
