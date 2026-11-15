@@ -94,9 +94,13 @@ Upgrade on any machine, then commit the lock with any new `.mise/locks`
 entries:
 
 ```bash
-mise upgrade
+mise run mise:upgrade
 git -C ~/source/github/dotfiles add home/dot_config/mise
 ```
+
+`mise:upgrade` is a global task in `config.toml`, so it runs from any
+directory. It updates mise itself, runs `mise upgrade --global`, then
+`mise lock --global` to fill in checksums for the other platforms.
 
 Other machines pick the versions up with `chezmoi update`, which reruns
 `mise install` when the lock changes. A tool missing on one platform is

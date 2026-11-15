@@ -83,3 +83,16 @@ copilot = "latest"
 codex = "latest"
 "aqua:pressly/goose" = "latest"
 postgres = "latest"
+
+# Global tasks run from any directory. A project task with the same name
+# would hide this one, hence the prefix.
+[tasks."mise:upgrade"]
+description = "Update mise, upgrade the global tools and refresh mise.lock"
+run = [
+  "mise self-update --yes",
+  # Moves "latest" and ranges to their newest release, installs it, and
+  # writes the new versions to mise.lock. Project config is left alone.
+  "mise upgrade --global",
+  # Fills in checksums and URLs for the other lockfile_platforms.
+  "mise lock --global",
+]
