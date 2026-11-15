@@ -1,6 +1,6 @@
 [settings]
 minimum_release_age = "24h"
-minimum_release_age_excludes = ["claude", "aqua:anomalyco/opencode"]
+minimum_release_age_excludes = ["claude", "opencode"]
 self_update.auto = true
 # Lock only the platforms this config runs on: mise.lock otherwise covers
 # seven, and installs on any other platform add entries to it.
@@ -34,9 +34,7 @@ lazygit = "latest"
 kubecolor = "latest"
 krew = "latest"
 k9s = "latest"
-# mise's registry maps `opencode` to npm first; aqua installs the release
-# binary directly, with no node or postinstall build.
-"aqua:anomalyco/opencode" = "latest"
+opencode = "latest"
 helm = "latest"
 oh-my-posh = "latest"
 fzf = "latest"

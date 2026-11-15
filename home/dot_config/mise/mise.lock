@@ -362,27 +362,6 @@ checksum = "sha256:81490037bc6d4843fc83d16019bc113be60c849d21614caa3e2f8ff4389fe
 url = "https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_7.conda"
 checksum = "sha256:ca7daae4f218a11fab82cc2857f0ea518ec3f46acec60490485347a4c22c6b3e"
 
-[[tools."aqua:anomalyco/opencode"]]
-version = "2.3.0"
-backend = "aqua:anomalyco/opencode"
-specifiers = ["latest"]
-
-[tools."aqua:anomalyco/opencode"."platforms.linux-arm64"]
-checksum = "sha256:3207fb5cdec448d479242c0f1a14f4f7bdfcad3a79209b5eb8f9003725e93711"
-url = "https://opencode.ai/files/bin/2.3.0/opencode-linux-arm64.tar.gz"
-
-[tools."aqua:anomalyco/opencode"."platforms.linux-x64"]
-checksum = "sha256:fc0f81522aceeabac47693d88389efa2bc517ce74c2c38fd6967819fcc6e4d3b"
-url = "https://opencode.ai/files/bin/2.3.0/opencode-linux-x64.tar.gz"
-
-[tools."aqua:anomalyco/opencode"."platforms.macos-arm64"]
-checksum = "sha256:7907df2b12720a840fbb49c5b978b9b82925b6bf75479a5fd216afa8932b6702"
-url = "https://opencode.ai/files/bin/2.3.0/opencode-darwin-arm64.zip"
-
-[tools."aqua:anomalyco/opencode"."platforms.windows-x64"]
-checksum = "sha256:2e14eee53f4abad803d55fdc472c1b12dc3802d687ae204f81e7908bd2ab1895"
-url = "https://opencode.ai/files/bin/2.3.0/opencode-windows-x64.zip"
-
 [[tools."aqua:pressly/goose"]]
 version = "3.30.1"
 backend = "aqua:pressly/goose"
@@ -1285,6 +1264,15 @@ checksum = "sha256:d34b1866860ca82b9349f0321aedcf40b5ad7edecd569d7c8d05c24512a44
 checksum_source = "mise-versions"
 url = "https://github.com/JanDeDobbeleer/oh-my-posh/releases/download/v32.0.0/posh-windows-amd64.exe"
 url_api = "https://api.github.com/repos/JanDeDobbeleer/oh-my-posh/releases/assets/724419082"
+
+[[tools.opencode]]
+version = "2.3.0"
+aube = { path = ".mise/locks/opencode/2.3.0~009061c2", digest = "sha256:7551d2030029342acda79c9d94e764e59e099221b482eb878f5f589eb576a26d" }
+backend = "npm:@opencode/cli"
+specifiers = ["latest"]
+
+[tools.opencode.options]
+allow_builds = '["@opencode/cli"]'
 
 [[tools.opentofu]]
 version = "1.13.9"
